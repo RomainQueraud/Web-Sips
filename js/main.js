@@ -1,4 +1,13 @@
 // Sliders : http://seiyria.com/bootstrap-slider/
+// Switchs : http://www.bootstrap-switch.org/
+
+//var URI_windows = "http://dbpedia.org/page/Microsoft_Windows";
+//var URI_linux = "http://dbpedia.org/page/Linux";
+
+function onLoad(){
+	sendQuery();
+	$("[name='os-checkbox']").bootstrapSwitch();
+}
 
 /* ============================================================ */
 
@@ -24,34 +33,64 @@ function getTransferValue(){
 	return $('[name=transferSlider]').slider().slider("getValue");
 }
 
+function getOsValue(){
+	var checked = ($('[name=os-checkbox]').bootstrapSwitch('state'));
+	if(checked){
+		return "windows";
+	}
+	else{
+		return "linux";
+	}
+}
+
+//?s <"+URI+"os> ?os.FILTER (CONTAINS(LCASE(?os), '"+getOsValue()+"') ||CONTAINS(?os, '')) .\n\
+
 /* Return the complete Query String */
 function getSparqlQuery(){
 	var sparqlQuery = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\
-Select ?s ?cpu ?ram ?disk ?transfer ?price ?providername\n\
+Select ?s ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment\n\
 Where{\n\
-	?s <"+URI+"transferSpeed> ?transfer.FILTER(xsd:float(?transfer)>="+getTransferValue()+" || xsd:float(?transfer)=-1) .\n\
+	?s <"+URI+"os> ?os.FILTER (CONTAINS(LCASE(?os), '"+getOsValue()+"') || ?os='') .\n\
 	{\n\
-		Select ?s ?cpu ?ram ?disk ?price ?providername\n\
+		Select ?s ?id ?cpu ?ram ?disk ?transfer ?price ?providername ?comment\n\
 		Where{\n\
-			?s <"+URI+"ssd> ?disk.FILTER(xsd:float(?disk)>="+getDiskValue()+" || xsd:float(?disk)=-1) .\n\
+			?s <"+URI+"id> ?id .\n\
 			{\n\
-				Select ?s ?cpu ?ram ?price ?providername\n\
+				Select ?s ?cpu ?ram ?disk ?transfer ?price ?providername ?comment\n\
 				Where{\n\
-					?s <"+URI+"ram> ?ram.FILTER(xsd:float(?ram)>="+getRamValue()+" || xsd:float(?ram)=-1) .\n\
+					?s <"+URI+"comment> ?comment .\n\
 					{\n\
-						Select ?s ?cpu ?price ?providername\n\
+						Select ?s ?cpu ?ram ?disk ?transfer ?price ?providername\n\
 						Where{\n\
-							?s <"+URI+"providerName> ?providername .\n\
+							?s <"+URI+"transferSpeed> ?transfer.FILTER(xsd:float(?transfer)>="+getTransferValue()+" || xsd:float(?transfer)=-1) .\n\
 							{\n\
-								Select ?s ?cpu ?price\n\
+								Select ?s ?cpu ?ram ?disk ?price ?providername\n\
 								Where{\n\
-								  ?s <"+URI+"price> ?price .\n\
-								  {\n\
-									Select ?s ?cpu\n\
-									Where {\n\
-									  ?s <"+URI+"cpu> ?cpu.FILTER(xsd:float(?cpu)>="+getCpuValue()+" || xsd:float(?cpu)=-1)\n\
+									?s <"+URI+"ssd> ?disk.FILTER(xsd:float(?disk)>="+getDiskValue()+" || xsd:float(?disk)=-1) .\n\
+									{\n\
+										Select ?s ?cpu ?ram ?price ?providername\n\
+										Where{\n\
+											?s <"+URI+"ram> ?ram.FILTER(xsd:float(?ram)>="+getRamValue()+" || xsd:float(?ram)=-1) .\n\
+											{\n\
+												Select ?s ?cpu ?price ?providername\n\
+												Where{\n\
+													?s <"+URI+"providerName> ?providername .\n\
+													{\n\
+														Select ?s ?cpu ?price\n\
+														Where{\n\
+														  ?s <"+URI+"price> ?price .\n\
+														  {\n\
+															Select ?s ?cpu\n\
+															Where {\n\
+															  ?s <"+URI+"cpu> ?cpu.FILTER(xsd:float(?cpu)>="+getCpuValue()+" || xsd:float(?cpu)=-1)\n\
+															}\n\
+														  }\n\
+														}\n\
+													}\n\
+												}\n\
+											}\n\
+										}\n\
 									}\n\
-								  }\n\
 								}\n\
 							}\n\
 						}\n\
@@ -78,24 +117,41 @@ function affectValue(value){
  Return a constructed <div></div>*/
 function getProviderDiv(config){
 	//TODO add the switch for the currency
+	var s = config.s.value;
+	var id = config.id.value;
 	var img = "img/"+config.providername.value+".png";
 	var cpu = affectValue(config.cpu.value);
 	var ram = affectValue(config.ram.value);
 	var disk = affectValue(config.disk.value);
 	var transfer = affectValue(config.transfer.value);
+	var comment = config.comment.value;
+	
 	var div = '\
-	<div class="config">\n\
+	<div class="config" onmouseover="displayAdditionalInfo('+id+')" onmouseout="hideAdditionalInfo('+id+')">\n\
 		<img src="'+img+'" alt="Provider image">\n\
-		<p>Processor <b>'+cpu+' CPUs</b></p>\n\
-		<p>Ram <b>'+ram+'GB</b></p>\n\
-		<p>Disk <b>'+disk+'GB</b></p>\n\
-		<p>Transfer <b>'+transfer+'TB</b></p>\n\
-		<p> --------- </p>\n\
-		<p id=writtenPrice>'+config.price.value+'$</p>\n\
-	</div>'
+		<div class="details">\n\
+			<p>Processor <b>'+cpu+' CPUs</b></p>\n\
+			<p>Ram <b>'+ram+'GB</b></p>\n\
+			<p>Disk <b>'+disk+'GB</b></p>\n\
+			<p>Transfer <b>'+transfer+'TB</b></p>\n\
+			<p> --------- </p>\n\
+			<p id=writtenPrice>'+config.price.value+'$</p>\n\
+			<div class="addInfo" id='+id+'>\n\
+				<p>'+comment+'</p>\n\
+			</div>\n\
+		</div>\n\
+	</div>';
 	
 	return div;
 }	
+
+function displayAdditionalInfo(s){
+	$("#"+s).css("display", "inline"); 
+}
+
+function hideAdditionalInfo(s){
+	$("#"+s).css("display", "none"); 
+}
 
 /* ============================================================ */
 
@@ -110,7 +166,7 @@ function sendQuery(){
 	for(var i=0 ; i<configs.length ; i++){
 		var config = configs[i];
 		var div = getProviderDiv(config);
-		providersDiv.insertAdjacentHTML( 'beforeend', div );
+		providersDiv.insertAdjacentHTML('beforeend', div);
 	}
 }
 
@@ -156,13 +212,12 @@ function getOptimizedConfigs(configs){
 		for(var j=0 ; j<newConfigs.length ; j++){
 			if(config.providername.value == newConfigs[j].providername.value){
 				isProviderInNewConfig = true;
-				if(config.price.value < newConfigs[j].price.value){
+				if(parseFloat(config.price.value) < parseFloat(newConfigs[j].price.value)){
 					newConfigs[j] = config;
 				}
 			}
 		}
 		if(!isProviderInNewConfig){
-			console.log("Push : "+config.providername.value);
 			newConfigs.push(config);
 		}
 	}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SIPS</title>
+		<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+		<link href="css/bootstrap-slider.css" rel="stylesheet" media="screen">
+		<link href="css/style.css" rel="stylesheet" media="screen">
+    </head>
+    <body onload="sendQuery()">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/bootstrap-slider.js"></script>
+		<script src="js/main.js"></script>
+		
+        <form id="sparql-form" action="http://localhost:3030/ds/query" method="GET" accept-charset="UTF-8">
+            <textarea name="query" cols="70" rows="10"></textarea>
+
+            <select name="output">
+			  <option value="json">JSON</option>
+              <option value="text">Text</option>
+              <option value="xml">XML</option>
+              <option value="csv">CSV</option>
+              <option value="tsv">TSV</option>
+            </select>
+            <select name="stylesheet">
+              <option value=""></option>
+              <option value="/xml-to-html.xsl">xml-to-html</option>
+              <option value="/xml-to-html-links.xsl">xml-to-html-links</option>
+              <option value="/xml-to-html-plain.xsl">xml-to-html-plain</option>
+            </select>
+            <input name="force-accept" value="text/plain" type="checkbox">
+    	    <input value="Get Results" type="submit">
+        </form>
+		
+		<div id="sliders">
+			<h1> Configuration </h1>
+			<div class="slider">
+				<input
+					type="text"
+					name="cpuSlider"
+					data-provide="slider"
+					data-slider-min="1"
+					data-slider-max="20"
+					data-slider-step="1"
+					data-slider-value="2"
+					data-slider-tooltip="always"
+					data-slider-orientation="vertical"
+					data-slider-reversed="true"
+				>
+				<p>Cpu</P>
+			</div>
+			<div class="slider">
+				<input
+					type="text"
+					name="ramSlider"
+					data-provide="slider"
+					data-slider-min="1"
+					data-slider-max="64"
+					data-slider-step="1"
+					data-slider-value="2"
+					data-slider-tooltip="always"
+					data-slider-orientation="vertical"
+					data-slider-reversed="true"
+				>
+				<p>Ram</p>
+			</div>
+			<div class="slider">
+				<input
+					type="text"
+					name="diskSlider"
+					data-provide="slider"
+					data-slider-min="10"
+					data-slider-max="1000"
+					data-slider-step="10"
+					data-slider-value="50"
+					data-slider-tooltip="always"
+					data-slider-orientation="vertical"
+					data-slider-reversed="true"
+				>
+				<p>Disk</p>
+			</div>
+			<div class="slider">
+				<input
+					type="text"
+					name="transferSlider"
+					data-provide="slider"
+					data-slider-min="1"
+					data-slider-max="15"
+					data-slider-step="1"
+					data-slider-value="3"
+					data-slider-tooltip="always"
+					data-slider-orientation="vertical"
+					data-slider-reversed="true"
+				>
+				<p>Transfer</p>
+			</div>
+			<button class="btn btn-primary" onclick="sendQuery()">Send Query</button> 
+		</div>
+		
+		<div id="right-part">
+			<h1> Providers </h1>
+			<div id="providers">
+			</div>
+		</div>
+		
+    </body>
+</html>

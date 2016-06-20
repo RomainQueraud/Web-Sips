@@ -8,11 +8,12 @@ body {
 }
 
 #sparql-form {
-	//display: none; /* Comment to display form*/
+	display: none; /* Comment to display form*/
 }
 
 #sliders{
-	
+	float : left;
+	position : fixed;
 	display : inline-block;
 	vertical-align: top;
 	text-align : center;
@@ -26,6 +27,8 @@ body {
 #right-part{
 	display : inline-block;
 	text-align : center;
+	max-width : 50%;
+	float : right;
 }
 
 #providers {
@@ -67,6 +70,7 @@ body {
 }
 
 .addInfo {
+	padding : 15px;
 	display:none;
 	color : white;
 	border-radius: 5%;

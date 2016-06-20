@@ -1,12 +1,24 @@
 // Sliders : http://seiyria.com/bootstrap-slider/
 // Switchs : http://www.bootstrap-switch.org/
 
-//var URI_windows = "http://dbpedia.org/page/Microsoft_Windows";
-//var URI_linux = "http://dbpedia.org/page/Linux";
+var URI_windows = "http://dbpedia.org/page/Microsoft_Windows";
+var URI_linux = "http://dbpedia.org/page/Linux";
+
+var links = {
+	CloudWare : "https://client.cloudware.bg/index.php?/cart/-lang-c_cloudservers-/&step=0&languagechange=English",
+	Atlantic : "https://www.atlantic.net/cloud-hosting/pricing/",
+	CloudSigma : "https://www.cloudsigma.com/pricing/",
+	VirtualServer : "https://www.virtual-server.net/home/",
+};
 
 function onLoad(){
 	sendQuery();
+	$('[name=cpuSlider]').slider().on('slideStop', sendQuery);
+	$('[name=ramSlider]').slider().on('slideStop', sendQuery);
+	$('[name=diskSlider]').slider().on('slideStop', sendQuery);
+	$('[name=transferSlider]').slider().on('slideStop', sendQuery);
 	$("[name='os-checkbox']").bootstrapSwitch();
+	$("[name='os-checkbox']").on('switchChange.bootstrapSwitch', sendQuery); 
 }
 
 /* ============================================================ */
@@ -50,7 +62,7 @@ function getSparqlQuery(){
 	var sparqlQuery = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\
 Select ?s ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment\n\
 Where{\n\
-	?s <"+URI+"os> ?os.FILTER (CONTAINS(LCASE(?os), '"+getOsValue()+"') || ?os='') .\n\
+	?s <"+URI+"os> ?os.FILTER (CONTAINS(LCASE(str(?os)), '"+getOsValue()+"') || ?os='') .\n\
 	{\n\
 		Select ?s ?id ?cpu ?ram ?disk ?transfer ?price ?providername ?comment\n\
 		Where{\n\
@@ -105,8 +117,14 @@ Where{\n\
 }
 
 function affectValue(value){
-	if(value==-1){
+	if(value==-1 || value==""){
 		return "Not available";
+	}
+	else if(value==URI_windows){
+		return "Windows";
+	}
+	else if(value==URI_linux){
+		return "Linux";
 	}
 	else{
 		return value;
@@ -119,16 +137,20 @@ function getProviderDiv(config){
 	//TODO add the switch for the currency
 	var s = config.s.value;
 	var id = config.id.value;
+	var providerName = config.providername.value;
 	var img = "img/"+config.providername.value+".png";
 	var cpu = affectValue(config.cpu.value);
 	var ram = affectValue(config.ram.value);
 	var disk = affectValue(config.disk.value);
 	var transfer = affectValue(config.transfer.value);
+	var os = affectValue(config.os.value);
 	var comment = config.comment.value;
 	
 	var div = '\
 	<div class="config" onmouseover="displayAdditionalInfo('+id+')" onmouseout="hideAdditionalInfo('+id+')">\n\
-		<img src="'+img+'" alt="Provider image">\n\
+		<a href="'+links[providerName]+'">\n\
+			<img src="'+img+'" alt="Provider image">\n\
+		</a>\n\
 		<div class="details">\n\
 			<p>Processor <b>'+cpu+' CPUs</b></p>\n\
 			<p>Ram <b>'+ram+'GB</b></p>\n\
@@ -137,13 +159,14 @@ function getProviderDiv(config){
 			<p> --------- </p>\n\
 			<p id=writtenPrice>'+config.price.value+'$</p>\n\
 			<div class="addInfo" id='+id+'>\n\
+				<p>Os <b>'+os+'</b>\n\
 				<p>'+comment+'</p>\n\
 			</div>\n\
 		</div>\n\
 	</div>';
 	
 	return div;
-}	
+}
 
 function displayAdditionalInfo(s){
 	$("#"+s).css("display", "inline"); 

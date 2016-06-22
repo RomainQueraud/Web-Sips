@@ -13,7 +13,7 @@ ul {
 }
 
 #sparql-form {
-	//display: none; /* Comment to display form*/
+	display: none; /* Comment to display form*/
 }
 
 div .vertical{

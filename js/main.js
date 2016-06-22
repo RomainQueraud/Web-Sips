@@ -13,6 +13,16 @@ var links = {
 	EApps : "https://portal.eapps.com/order/index.php?pid=74&skip=true",
 };
 
+var URI = {
+	europe : "http://dbpedia.org/page/Europe",
+	northAmerica : "http://dbpedia.org/page/North_America",
+	southAmerica : "http://dbpedia.org/page/South_America",
+	africa : "http://dbpedia.org/page/Africa",
+	asia : "http://dbpedia.org/page/Asia",
+	australia : "http://dbpedia.org/page/Australia",
+	antartica : "http://dbpedia.org/page/Antarctica",
+}
+
 function onLoad(){
 	sendQuery();
 	$('[name=cpuSlider]').slider().on('slideStop', sendQuery);
@@ -26,7 +36,7 @@ function onLoad(){
 
 /* ============================================================ */
 
-var URI = "http://www.ic4.ie/SIPS/";
+var baseURI = "http://www.ic4.ie/SIPS/";
 var FusekiServerAdress = "http://localhost:3030/ds/query";
 
 /* ============================================================ */
@@ -50,7 +60,23 @@ function getTransferValue(){
 
 function getContinentValue(){
 	var sel = document.getElementById('continent-select');
-	return sel.value;
+	switch(sel.value){
+		case "Africa" : console.log(URI["africa"]); return URI["africa"];
+		break;
+		case "Australia" : console.log(URI["australia"]); return URI["australia"];
+		break;
+		case "Asia" : console.log(URI["asia"]); return URI["asia"];
+		break;
+		case "Europe" : console.log(URI["europe"]); return URI["europe"];
+		break;
+		case "North America" : console.log(URI["northAmerica"]); return URI["northAmerica"];
+		break;
+		case "South America" : console.log(URI["southAmerica"]); return URI["southAmerica"];
+		break;
+		case "Any location" : console.log("Any location"); return "Any location";
+		break;
+		default : throw "Unknown continent";
+	}
 }
 
 function getOsValue(){
@@ -63,48 +89,73 @@ function getOsValue(){
 	}
 }
 
-//?s <"+URI+"os> ?os.FILTER (CONTAINS(LCASE(?os), '"+getOsValue()+"') ||CONTAINS(?os, '')) .\n\
+function getSparqlQueryContinent(){
+	var sparqlQuery = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\
+	Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?continent ?os ?price ?providername ?comment\n\
+	Where{\n\
+		?providerUri <"+baseURI+"continent> ?continent .\n";
+		
+	if(getContinentValue()!= "Any location"){
+		sparqlQuery += "FILTER (CONTAINS(str(?continent), '"+getContinentValue()+"') || ?continent='') .\n";
+	} 
+	
+	sparqlQuery+= "{"+getSparqlQuery()+"}";
+	
+	sparqlQuery+="\
+	}\n\
+	";
+	
+	return sparqlQuery;
+}
 
 /* Return the complete Query String */
 function getSparqlQuery(){
-	var sparqlQuery = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\
-Select ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment\n\
+	var sparqlQuery = "\
+Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment\n\
 Where{\n\
-	?configUri <"+URI+"os> ?os.FILTER (CONTAINS(LCASE(str(?os)), '"+getOsValue()+"') || ?os='') .\n\
+	?providerUri <"+baseURI+"config> ?configUri .\n\
 	{\n\
-		Select ?configUri ?id ?cpu ?ram ?disk ?transfer ?price ?providername ?comment\n\
+		Select ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment\n\
 		Where{\n\
-			?configUri <"+URI+"id> ?id .\n\
+			?configUri <"+baseURI+"os> ?os.FILTER (CONTAINS(LCASE(str(?os)), '"+getOsValue()+"') || ?os='') .\n\
 			{\n\
-				Select ?configUri ?cpu ?ram ?disk ?transfer ?price ?providername ?comment\n\
+				Select ?configUri ?id ?cpu ?ram ?disk ?transfer ?price ?providername ?comment\n\
 				Where{\n\
-					?configUri <"+URI+"comment> ?comment .\n\
+					?configUri <"+baseURI+"id> ?id .\n\
 					{\n\
-						Select ?configUri ?cpu ?ram ?disk ?transfer ?price ?providername\n\
+						Select ?configUri ?cpu ?ram ?disk ?transfer ?price ?providername ?comment\n\
 						Where{\n\
-							?configUri <"+URI+"transferSpeed> ?transfer.FILTER(xsd:float(?transfer)>="+getTransferValue()+" || xsd:float(?transfer)=-1) .\n\
+							?configUri <"+baseURI+"comment> ?comment .\n\
 							{\n\
-								Select ?configUri ?cpu ?ram ?disk ?price ?providername\n\
+								Select ?configUri ?cpu ?ram ?disk ?transfer ?price ?providername\n\
 								Where{\n\
-									?configUri <"+URI+"ssd> ?disk.FILTER(xsd:float(?disk)>="+getDiskValue()+" || xsd:float(?disk)=-1) .\n\
+									?configUri <"+baseURI+"transferSpeed> ?transfer.FILTER(xsd:float(?transfer)>="+getTransferValue()+" || xsd:float(?transfer)=-1) .\n\
 									{\n\
-										Select ?configUri ?cpu ?ram ?price ?providername\n\
+										Select ?configUri ?cpu ?ram ?disk ?price ?providername\n\
 										Where{\n\
-											?configUri <"+URI+"ram> ?ram.FILTER(xsd:float(?ram)>="+getRamValue()+" || xsd:float(?ram)=-1) .\n\
+											?configUri <"+baseURI+"ssd> ?disk.FILTER(xsd:float(?disk)>="+getDiskValue()+" || xsd:float(?disk)=-1) .\n\
 											{\n\
-												Select ?configUri ?cpu ?price ?providername\n\
+												Select ?configUri ?cpu ?ram ?price ?providername\n\
 												Where{\n\
-													?configUri <"+URI+"providerName> ?providername .\n\
+													?configUri <"+baseURI+"ram> ?ram.FILTER(xsd:float(?ram)>="+getRamValue()+" || xsd:float(?ram)=-1) .\n\
 													{\n\
-														Select ?configUri ?cpu ?price\n\
+														Select ?configUri ?cpu ?price ?providername\n\
 														Where{\n\
-														  ?configUri <"+URI+"price> ?price .\n\
-														  {\n\
-															Select ?configUri ?cpu\n\
-															Where {\n\
-															  ?configUri <"+URI+"cpu> ?cpu.FILTER(xsd:float(?cpu)>="+getCpuValue()+" || xsd:float(?cpu)=-1)\n\
+															?configUri <"+baseURI+"providerName> ?providername .\n\
+															{\n\
+																Select ?configUri ?cpu ?price\n\
+																Where{\n\
+																  ?configUri <"+baseURI+"price> ?price .\n\
+																  {\n\
+																	Select ?configUri ?cpu\n\
+																	Where {\n\
+																	  ?configUri <"+baseURI+"cpu> ?cpu.FILTER(xsd:float(?cpu)>="+getCpuValue()+" || xsd:float(?cpu)=-1).\n\
+																	  {\n\
+																	  }\n\
+																	}\n\
+																  }\n\
+																}\n\
 															}\n\
-														  }\n\
 														}\n\
 													}\n\
 												}\n\
@@ -125,17 +176,28 @@ Where{\n\
 }
 
 function affectValue(value){
-	if(value==-1 || value==""){
-		return "Not available";
-	}
-	else if(value==URI_windows){
-		return "Windows";
-	}
-	else if(value==URI_linux){
-		return "Linux";
-	}
-	else{
-		return value;
+	switch (value){
+		case("-1") : return "Not available";
+		break;
+		case("") : return "Not available";
+		break;
+		case(URI_windows) : return "Windows";
+		break;
+		case(URI_linux) : return "Linux";
+		break;
+		case(URI["africa"]) : return "Africa";
+		break;
+		case(URI["asia"]) : return "Asia";
+		break;
+		case(URI["australia"]) : return "Australia";
+		break;
+		case(URI["europe"]) : return "Europe";
+		break;
+		case(URI["northAmerica"]) : return "North America";
+		break;
+		case(URI["southAmerica"]) : return "South America";
+		break;
+		default : return value;
 	}
 }
 
@@ -143,6 +205,7 @@ function affectValue(value){
  Return a constructed <div></div>*/
 function getProviderDiv(config){
 	//TODO add the switch for the currency
+	var providerUri = config.providerUri.value;
 	var configUri = config.configUri.value;
 	var id = config.id.value;
 	var providerName = config.providername.value;
@@ -151,6 +214,7 @@ function getProviderDiv(config){
 	var ram = affectValue(config.ram.value);
 	var disk = affectValue(config.disk.value);
 	var transfer = affectValue(config.transfer.value);
+	var continent = affectValue(config.continent.value);
 	var os = affectValue(config.os.value);
 	var comment = config.comment.value;
 	
@@ -167,6 +231,7 @@ function getProviderDiv(config){
 			<p> --------- </p>\n\
 			<p id=writtenPrice>'+config.price.value+'$</p>\n\
 			<div class="addInfo" id='+id+'>\n\
+				<p>Continent <b>'+continent+'</b>\n\
 				<p>Os <b>'+os+'</b>\n\
 				<p>'+comment+'</p>\n\
 			</div>\n\
@@ -188,7 +253,7 @@ function hideAdditionalInfo(s){
 
 /* Fill the textArea with the Query String */
 function fillTextArea(){
-	$('[name=query]').val(getSparqlQuery());
+	$('[name=query]').val(getSparqlQueryContinent());
 }
 
 /* Send the Query to the server and return the list of configurations as a result */

@@ -15,6 +15,11 @@
 		<script src="js/bootstrap-switch.js"></script>
 		<script src="js/main.js"></script>
 		
+		<ul class="nav nav-pills">
+		  <li role="presentation" class="active"><a href="#">Pricing</a></li>
+		  <li role="presentation"><a href="http://localhost:3030/control-panel.tpl">SPARQL</a></li>
+		</ul>
+		
         <form id="sparql-form" action="http://localhost:3030/ds/query" method="GET" accept-charset="UTF-8">
             <textarea name="query" cols="70" rows="10"></textarea>
 
@@ -35,78 +40,87 @@
     	    <input value="Get Results" type="submit">
         </form>
 		
-		<div id="sliders">
-			<h1> Configuration </h1>
-			<div class="slider">
-				<input
-					type="text"
-					name="cpuSlider"
-					data-provide="slider"
-					data-slider-min="1"
-					data-slider-max="20"
-					data-slider-step="1"
-					data-slider-value="1"
-					data-slider-tooltip="always"
-					data-slider-orientation="vertical"
-					data-slider-reversed="true"
-				>
-				<p>Cpu</P>
-			</div>
-			<div class="slider">
-				<input
-					type="text"
-					name="ramSlider"
-					data-provide="slider"
-					data-slider-min="0"
-					data-slider-max="64"
-					data-slider-step="1"
-					data-slider-value="0"
-					data-slider-tooltip="always"
-					data-slider-orientation="vertical"
-					data-slider-reversed="true"
-				>
-				<p>Ram</p>
-			</div>
-			<div class="slider">
-				<input
-					type="text"
-					name="diskSlider"
-					data-provide="slider"
-					data-slider-min="10"
-					data-slider-max="1000"
-					data-slider-step="10"
-					data-slider-value="10"
-					data-slider-tooltip="always"
-					data-slider-orientation="vertical"
-					data-slider-reversed="true"
-				>
-				<p>Disk</p>
-			</div>
-			<div class="slider">
-				<input
-					type="text"
-					name="transferSlider"
-					data-provide="slider"
-					data-slider-min="1"
-					data-slider-max="15"
-					data-slider-step="1"
-					data-slider-value="1"
-					data-slider-tooltip="always"
-					data-slider-orientation="vertical"
-					data-slider-reversed="true"
-				>
-				<p>Transfer</p>
-			</div>
-			
-			<input type="checkbox" name="os-checkbox" data-off-text="Linux" data-on-text="Windows" checked>
-			
-			<!--<button class="btn btn-primary" onclick="sendQuery()">Send Query</button> -->
-			
-		</div>
+		<h1> Select your Configuration </h1>
 		
-		<div id="right-part">
-			<h1> Providers </h1>
-			<div id="providers">
+		<div id="green-part">
+			<div id="sliders">
+				<div class="slider">
+					<input
+						type="text"
+						name="cpuSlider"
+						data-provide="slider"
+						data-slider-min="1"
+						data-slider-max="20"
+						data-slider-step="1"
+						data-slider-value="1"
+						data-slider-tooltip="always"
+						data-slider-orientation="vertical"
+						data-slider-reversed="true"
+					>
+					<p>Cpu</P>
+				</div>
+				<div class="slider">
+					<input
+						type="text"
+						name="ramSlider"
+						data-provide="slider"
+						data-slider-min="0"
+						data-slider-max="64"
+						data-slider-step="1"
+						data-slider-value="0"
+						data-slider-tooltip="always"
+						data-slider-orientation="vertical"
+						data-slider-reversed="true"
+					>
+					<p>Ram</p>
+				</div>
+				<div class="slider">
+					<input
+						type="text"
+						name="diskSlider"
+						data-provide="slider"
+						data-slider-min="10"
+						data-slider-max="1000"
+						data-slider-step="10"
+						data-slider-value="10"
+						data-slider-tooltip="always"
+						data-slider-orientation="vertical"
+						data-slider-reversed="true"
+					>
+					<p>Disk</p>
+				</div>
+				<div class="slider">
+					<input
+						type="text"
+						name="transferSlider"
+						data-provide="slider"
+						data-slider-min="1"
+						data-slider-max="15"
+						data-slider-step="1"
+						data-slider-value="1"
+						data-slider-tooltip="always"
+						data-slider-orientation="vertical"
+						data-slider-reversed="true"
+					>
+					<p>Transfer</p>
+				</div>
+				
+				<div class="vertical">
+					<img id="loading-image" src="img/ajax-loader.gif" alt="Reloading" height="40" width="40" style="visibility : hidden;"> 
+					<br />
+					 <div class="form-group">
+						<select class="form-control" id="continent-select">
+							<option>Any location</option>
+							<option>Africa</option>
+							<option>Australia</option>
+							<option>Asia</option>
+							<option>Europe</option>
+							<option>North America</option>
+							<option>South America</option>
+						</select>
+					</div>
+					<input type="checkbox" name="os-checkbox" data-off-text="Linux" data-on-text="Windows" checked>
+				</div>
 			</div>
 		</div>
 		

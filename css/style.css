@@ -1,6 +1,11 @@
 body {
 	background: #383838;
 	color : white;
+	text-align : center;
+}
+
+ul {
+	background-color : white;
 }
 
 #ex1Slider .slider-selection {
@@ -8,15 +13,26 @@ body {
 }
 
 #sparql-form {
-	display: none; /* Comment to display form*/
+	//display: none; /* Comment to display form*/
+}
+
+div .vertical{
+	display : inline-block;
+}
+
+div .vertical img, div .vertical input{
+	display : block;
 }
 
 #sliders{
-	float : left;
-	position : fixed;
 	display : inline-block;
-	vertical-align: top;
 	text-align : center;
+	background: #383838;
+	border-radius: 5%;
+	box-shadow: 1px 1px 2px black;
+	padding : 5px;
+	margin : 15px;
+	vertical-align : top;
 }
 
 .slider{
@@ -24,14 +40,10 @@ body {
 	margin : 15px;
 }
 
-#right-part{
+#green-part {
+	margin : 50px;
 	display : inline-block;
 	text-align : center;
-	max-width : 50%;
-	float : right;
-}
-
-#providers {
 	background : #339966;
 	padding : 5px;
 	border-radius: 5%;
@@ -41,10 +53,7 @@ body {
 	background : white;
 	border-radius : 5%;
 	width: 15rem;
-	margin-left: 15px;
-	margin-right: 15px;
-	margin-top : 15px;
-	margin-bottom : 15px;
+	margin : 15px;
 	padding : 15px;
 	display : inline-block;
 	color : black;
@@ -70,6 +79,7 @@ body {
 }
 
 .addInfo {
+	border-style : inset;
 	padding : 15px;
 	display:none;
 	color : white;

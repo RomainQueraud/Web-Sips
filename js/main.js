@@ -9,6 +9,8 @@ var links = {
 	Atlantic : "https://www.atlantic.net/cloud-hosting/pricing/",
 	CloudSigma : "https://www.cloudsigma.com/pricing/",
 	VirtualServer : "https://www.virtual-server.net/home/",
+	SecureRack : "https://my.securerack.com/index.php?/cart/vdatacenter/",
+	EApps : "https://portal.eapps.com/order/index.php?pid=74&skip=true",
 };
 
 function onLoad(){
@@ -19,6 +21,7 @@ function onLoad(){
 	$('[name=transferSlider]').slider().on('slideStop', sendQuery);
 	$("[name='os-checkbox']").bootstrapSwitch();
 	$("[name='os-checkbox']").on('switchChange.bootstrapSwitch', sendQuery); 
+	$("#continent-select").on('change', sendQuery); 
 }
 
 /* ============================================================ */
@@ -45,6 +48,11 @@ function getTransferValue(){
 	return $('[name=transferSlider]').slider().slider("getValue");
 }
 
+function getContinentValue(){
+	var sel = document.getElementById('continent-select');
+	return sel.value;
+}
+
 function getOsValue(){
 	var checked = ($('[name=os-checkbox]').bootstrapSwitch('state'));
 	if(checked){
@@ -60,41 +68,41 @@ function getOsValue(){
 /* Return the complete Query String */
 function getSparqlQuery(){
 	var sparqlQuery = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\
-Select ?s ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment\n\
+Select ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment\n\
 Where{\n\
-	?s <"+URI+"os> ?os.FILTER (CONTAINS(LCASE(str(?os)), '"+getOsValue()+"') || ?os='') .\n\
+	?configUri <"+URI+"os> ?os.FILTER (CONTAINS(LCASE(str(?os)), '"+getOsValue()+"') || ?os='') .\n\
 	{\n\
-		Select ?s ?id ?cpu ?ram ?disk ?transfer ?price ?providername ?comment\n\
+		Select ?configUri ?id ?cpu ?ram ?disk ?transfer ?price ?providername ?comment\n\
 		Where{\n\
-			?s <"+URI+"id> ?id .\n\
+			?configUri <"+URI+"id> ?id .\n\
 			{\n\
-				Select ?s ?cpu ?ram ?disk ?transfer ?price ?providername ?comment\n\
+				Select ?configUri ?cpu ?ram ?disk ?transfer ?price ?providername ?comment\n\
 				Where{\n\
-					?s <"+URI+"comment> ?comment .\n\
+					?configUri <"+URI+"comment> ?comment .\n\
 					{\n\
-						Select ?s ?cpu ?ram ?disk ?transfer ?price ?providername\n\
+						Select ?configUri ?cpu ?ram ?disk ?transfer ?price ?providername\n\
 						Where{\n\
-							?s <"+URI+"transferSpeed> ?transfer.FILTER(xsd:float(?transfer)>="+getTransferValue()+" || xsd:float(?transfer)=-1) .\n\
+							?configUri <"+URI+"transferSpeed> ?transfer.FILTER(xsd:float(?transfer)>="+getTransferValue()+" || xsd:float(?transfer)=-1) .\n\
 							{\n\
-								Select ?s ?cpu ?ram ?disk ?price ?providername\n\
+								Select ?configUri ?cpu ?ram ?disk ?price ?providername\n\
 								Where{\n\
-									?s <"+URI+"ssd> ?disk.FILTER(xsd:float(?disk)>="+getDiskValue()+" || xsd:float(?disk)=-1) .\n\
+									?configUri <"+URI+"ssd> ?disk.FILTER(xsd:float(?disk)>="+getDiskValue()+" || xsd:float(?disk)=-1) .\n\
 									{\n\
-										Select ?s ?cpu ?ram ?price ?providername\n\
+										Select ?configUri ?cpu ?ram ?price ?providername\n\
 										Where{\n\
-											?s <"+URI+"ram> ?ram.FILTER(xsd:float(?ram)>="+getRamValue()+" || xsd:float(?ram)=-1) .\n\
+											?configUri <"+URI+"ram> ?ram.FILTER(xsd:float(?ram)>="+getRamValue()+" || xsd:float(?ram)=-1) .\n\
 											{\n\
-												Select ?s ?cpu ?price ?providername\n\
+												Select ?configUri ?cpu ?price ?providername\n\
 												Where{\n\
-													?s <"+URI+"providerName> ?providername .\n\
+													?configUri <"+URI+"providerName> ?providername .\n\
 													{\n\
-														Select ?s ?cpu ?price\n\
+														Select ?configUri ?cpu ?price\n\
 														Where{\n\
-														  ?s <"+URI+"price> ?price .\n\
+														  ?configUri <"+URI+"price> ?price .\n\
 														  {\n\
-															Select ?s ?cpu\n\
+															Select ?configUri ?cpu\n\
 															Where {\n\
-															  ?s <"+URI+"cpu> ?cpu.FILTER(xsd:float(?cpu)>="+getCpuValue()+" || xsd:float(?cpu)=-1)\n\
+															  ?configUri <"+URI+"cpu> ?cpu.FILTER(xsd:float(?cpu)>="+getCpuValue()+" || xsd:float(?cpu)=-1)\n\
 															}\n\
 														  }\n\
 														}\n\
@@ -135,7 +143,7 @@ function affectValue(value){
  Return a constructed <div></div>*/
 function getProviderDiv(config){
 	//TODO add the switch for the currency
-	var s = config.s.value;
+	var configUri = config.configUri.value;
 	var id = config.id.value;
 	var providerName = config.providername.value;
 	var img = "img/"+config.providername.value+".png";
@@ -178,31 +186,16 @@ function hideAdditionalInfo(s){
 
 /* ============================================================ */
 
-/* Main function, Query button pressed */
-function sendQuery(){
-	var configs = getResultFromQuery();
-	console.log(configs);
-	configs = getOptimizedConfigs(configs);
-	console.log(configs);
-	var providersDiv = document.getElementById("providers");
-	$('#providers').html(''); //JQuery //Remove the old configurations
-	for(var i=0 ; i<configs.length ; i++){
-		var config = configs[i];
-		var div = getProviderDiv(config);
-		providersDiv.insertAdjacentHTML('beforeend', div);
-	}
-}
-
 /* Fill the textArea with the Query String */
 function fillTextArea(){
 	$('[name=query]').val(getSparqlQuery());
 }
 
 /* Send the Query to the server and return the list of configurations as a result */
-function getResultFromQuery(){
+function sendQuery(){
 	var configs;
+	$("#loading-image").css("visibility", "visible"); 
 	fillTextArea();
-	console.log("getResultFromQuery");
 	$.ajax({
 		async: false,
 		url: FusekiServerAdress, // url where to submit the request
@@ -210,19 +203,33 @@ function getResultFromQuery(){
 		dataType : 'json', // data type
 		data : $("#sparql-form").serialize(), // post data || get data
 		success : function(result) {
-			console.log("getResultFromQuery : SUCCESS")
+			console.log("sendQuery : SUCCESS")
 			configs = result.results.bindings;
-			console.log("getResultFromQuerySuccess : configs = ");
-			console.log(configs);
 			queryOver = true;
+			successQuery(configs)
+			$("#loading-image").css("visibility", "hidden"); 
 		},
 		error: function(xhr, resp, text) {
-			console.log("getResultFromQuery : ERROR")
+			console.log("sendQuery : ERROR")
 			console.log(xhr, resp, text);
 			queryOver = true;
+			$("#loading-image").css("visibility", "hidden"); 
 		}
 	})
 	return configs;
+}
+
+function successQuery(configs){
+	configs = getOptimizedConfigs(configs);
+	console.log(configs);
+	var providersDiv = document.getElementById("green-part");
+	//$('#providers').html(''); //JQuery //Remove the old configurations
+	$('.config').remove();
+	for(var i=0 ; i<configs.length ; i++){
+		var config = configs[i];
+		var div = getProviderDiv(config);
+		providersDiv.insertAdjacentHTML('beforeend', div);
+	}
 }
 
 /* Return a new list of configs, with only the cheapest for each provider 

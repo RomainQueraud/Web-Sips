@@ -11,6 +11,8 @@ var links = {
 	VirtualServer : "https://www.virtual-server.net/home/",
 	SecureRack : "https://my.securerack.com/index.php?/cart/vdatacenter/",
 	EApps : "https://portal.eapps.com/order/index.php?pid=74&skip=true",
+	E24Cloud : "https://www.e24cloud.com/en/price-list/",
+	VpsNet : "https://www.vps.net/products/ssd-vps2",
 };
 
 var URI = {
@@ -21,17 +23,34 @@ var URI = {
 	asia : "http://dbpedia.org/page/Asia",
 	australia : "http://dbpedia.org/page/Australia",
 	antartica : "http://dbpedia.org/page/Antarctica",
+	year : "http://dbpedia.org/page/Year",
+	yearDuration : 12,
+	month : "http://dbpedia.org/page/Month",
+	monthDuration : 1,
+	week : "http://dbpedia.org/page/Week",
+	weekDuration : (1/30.416)*7,
+	day : "http://dbpedia.org/page/Day",
+	dayDuration : 1/30.416,
+	hour : "http://dbpedia.org/page/Hour",
+	hourDuration : (1/30.416)/24,
+	minute : "http://dbpedia.org/page/Minute",
+	minuteDuration : ((1/30.416)/24)/60,
+	second : "http://dbpedia.org/page/Second",
+	secondDuration : (((1/30.416)/24)/60)/60,
 }
 
 function onLoad(){
-	sendQuery();
 	$('[name=cpuSlider]').slider().on('slideStop', sendQuery);
 	$('[name=ramSlider]').slider().on('slideStop', sendQuery);
 	$('[name=diskSlider]').slider().on('slideStop', sendQuery);
 	$('[name=transferSlider]').slider().on('slideStop', sendQuery);
-	$("[name='os-checkbox']").bootstrapSwitch();
+	$("[name='os-checkbox']").bootstrapSwitch('state', false);
 	$("[name='os-checkbox']").on('switchChange.bootstrapSwitch', sendQuery); 
+	$("[name='currency-checkbox']").bootstrapSwitch('state', false);
+	$("[name='currency-checkbox']").on('switchChange.bootstrapSwitch', sendQuery); 
 	$("#continent-select").on('change', sendQuery); 
+	$("#billing-select").on('change', sendQuery); 
+	sendQuery();
 }
 
 /* ============================================================ */
@@ -79,6 +98,27 @@ function getContinentValue(){
 	}
 }
 
+function getBillingDurationValue(){
+	var sel = document.getElementById('billing-select');
+	switch(sel.value){
+		case "Billing any" : console.log("billingDuration : "+1000); return 1000; //Max value
+		break;
+		case "Billing year" : console.log("billingDuration : "+URI["yearDuration"]); return URI["yearDuration"];
+		break;
+		case "Billing month" : console.log("billingDuration : "+URI["monthDuration"]); return URI["monthDuration"];
+		break;
+		case "Billing day" : console.log("billingDuration : "+URI["dayDuration"]); return URI["dayDuration"];
+		break;
+		case "Billing hour" : console.log("billingDuration : "+URI["hourDuration"]); return URI["hourDuration"];
+		break;
+		case "Billing minute" : console.log("billingDuration : "+URI["minuteDuration"]); return URI["minuteDuration"];
+		break;
+		case "Billing second" : console.log("billingDuration : "+URI["secondDuration"]); return URI["secondDuration"];
+		break;
+		default : throw "Unknown billing";
+	}
+}
+
 function getOsValue(){
 	var checked = ($('[name=os-checkbox]').bootstrapSwitch('state'));
 	if(checked){
@@ -89,9 +129,19 @@ function getOsValue(){
 	}
 }
 
+function isCurrencyDollar(){
+	var checked = ($('[name=currency-checkbox]').bootstrapSwitch('state'));
+	if(checked){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
 function getSparqlQueryContinent(){
 	var sparqlQuery = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\
-	Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?continent ?os ?price ?providername ?comment\n\
+	Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?continent ?os ?priceEuro ?price ?providername ?comment ?billing ?billingDuration\n\
 	Where{\n\
 		?providerUri <"+baseURI+"continent> ?continent .\n";
 		
@@ -111,49 +161,67 @@ function getSparqlQueryContinent(){
 /* Return the complete Query String */
 function getSparqlQuery(){
 	var sparqlQuery = "\
-Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment\n\
+Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?priceEuro ?price ?providername ?comment ?billing ?billingDuration\n\
 Where{\n\
-	?providerUri <"+baseURI+"config> ?configUri .\n\
+	?configUri <"+baseURI+"priceEuro> ?priceEuro .\n\
 	{\n\
-		Select ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment\n\
+		Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment ?billing ?billingDuration\n\
 		Where{\n\
-			?configUri <"+baseURI+"os> ?os.FILTER (CONTAINS(LCASE(str(?os)), '"+getOsValue()+"') || ?os='') .\n\
+			?providerUri <"+baseURI+"billing> ?billing .\n\
 			{\n\
-				Select ?configUri ?id ?cpu ?ram ?disk ?transfer ?price ?providername ?comment\n\
+				Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment ?billingDuration\n\
 				Where{\n\
-					?configUri <"+baseURI+"id> ?id .\n\
+					?providerUri <"+baseURI+"billingDuration> ?billingDuration.FILTER(xsd:float(?billingDuration)<="+getBillingDurationValue()+") .\n\
 					{\n\
-						Select ?configUri ?cpu ?ram ?disk ?transfer ?price ?providername ?comment\n\
+						Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment\n\
 						Where{\n\
-							?configUri <"+baseURI+"comment> ?comment .\n\
+							?providerUri <"+baseURI+"config> ?configUri .\n\
 							{\n\
-								Select ?configUri ?cpu ?ram ?disk ?transfer ?price ?providername\n\
+								Select ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment\n\
 								Where{\n\
-									?configUri <"+baseURI+"transferSpeed> ?transfer.FILTER(xsd:float(?transfer)>="+getTransferValue()+" || xsd:float(?transfer)=-1) .\n\
+									?configUri <"+baseURI+"os> ?os.FILTER (CONTAINS(LCASE(str(?os)), '"+getOsValue()+"') || ?os='') .\n\
 									{\n\
-										Select ?configUri ?cpu ?ram ?disk ?price ?providername\n\
+										Select ?configUri ?id ?cpu ?ram ?disk ?transfer ?price ?providername ?comment\n\
 										Where{\n\
-											?configUri <"+baseURI+"ssd> ?disk.FILTER(xsd:float(?disk)>="+getDiskValue()+" || xsd:float(?disk)=-1) .\n\
+											?configUri <"+baseURI+"id> ?id .\n\
 											{\n\
-												Select ?configUri ?cpu ?ram ?price ?providername\n\
+												Select ?configUri ?cpu ?ram ?disk ?transfer ?price ?providername ?comment\n\
 												Where{\n\
-													?configUri <"+baseURI+"ram> ?ram.FILTER(xsd:float(?ram)>="+getRamValue()+" || xsd:float(?ram)=-1) .\n\
+													?configUri <"+baseURI+"comment> ?comment .\n\
 													{\n\
-														Select ?configUri ?cpu ?price ?providername\n\
+														Select ?configUri ?cpu ?ram ?disk ?transfer ?price ?providername\n\
 														Where{\n\
-															?configUri <"+baseURI+"providerName> ?providername .\n\
+															?configUri <"+baseURI+"transferSpeed> ?transfer.FILTER(xsd:float(?transfer)>="+getTransferValue()+" || xsd:float(?transfer)=-1) .\n\
 															{\n\
-																Select ?configUri ?cpu ?price\n\
+																Select ?configUri ?cpu ?ram ?disk ?price ?providername\n\
 																Where{\n\
-																  ?configUri <"+baseURI+"price> ?price .\n\
-																  {\n\
-																	Select ?configUri ?cpu\n\
-																	Where {\n\
-																	  ?configUri <"+baseURI+"cpu> ?cpu.FILTER(xsd:float(?cpu)>="+getCpuValue()+" || xsd:float(?cpu)=-1).\n\
-																	  {\n\
-																	  }\n\
+																	?configUri <"+baseURI+"ssd> ?disk.FILTER(xsd:float(?disk)>="+getDiskValue()+" || xsd:float(?disk)=-1) .\n\
+																	{\n\
+																		Select ?configUri ?cpu ?ram ?price ?providername\n\
+																		Where{\n\
+																			?configUri <"+baseURI+"ram> ?ram.FILTER(xsd:float(?ram)>="+getRamValue()+" || xsd:float(?ram)=-1) .\n\
+																			{\n\
+																				Select ?configUri ?cpu ?price ?providername\n\
+																				Where{\n\
+																					?configUri <"+baseURI+"providerName> ?providername .\n\
+																					{\n\
+																						Select ?configUri ?cpu ?price\n\
+																						Where{\n\
+																						  ?configUri <"+baseURI+"price> ?price .\n\
+																						  {\n\
+																							Select ?configUri ?cpu\n\
+																							Where {\n\
+																							  ?configUri <"+baseURI+"cpu> ?cpu.FILTER(xsd:float(?cpu)>="+getCpuValue()+" || xsd:float(?cpu)=-1).\n\
+																							  {\n\
+																							  }\n\
+																							}\n\
+																						  }\n\
+																						}\n\
+																					}\n\
+																				}\n\
+																			}\n\
+																		}\n\
 																	}\n\
-																  }\n\
 																}\n\
 															}\n\
 														}\n\
@@ -197,6 +265,20 @@ function affectValue(value){
 		break;
 		case(URI["southAmerica"]) : return "South America";
 		break;
+		case(URI["year"]) : return "Year";
+		break;
+		case(URI["month"]) : return "Month";
+		break;
+		case(URI["week"]) : return "Week";
+		break;
+		case(URI["day"]) : return "Day";
+		break;
+		case(URI["hour"]) : return "Hour";
+		break;
+		case(URI["minute"]) : return "Minute";
+		break;
+		case(URI["second"]) : return "Second";
+		break;
 		default : return value;
 	}
 }
@@ -217,6 +299,8 @@ function getProviderDiv(config){
 	var continent = affectValue(config.continent.value);
 	var os = affectValue(config.os.value);
 	var comment = config.comment.value;
+	var billingDuration = config.billingDuration.value;
+	var billing = affectValue(config.billing.value);
 	
 	var div = '\
 	<div class="config" onmouseover="displayAdditionalInfo('+id+')" onmouseout="hideAdditionalInfo('+id+')">\n\
@@ -229,16 +313,27 @@ function getProviderDiv(config){
 			<p>Disk <b>'+disk+'GB</b></p>\n\
 			<p>Transfer <b>'+transfer+'TB</b></p>\n\
 			<p> --------- </p>\n\
-			<p id=writtenPrice>'+config.price.value+'$</p>\n\
+			'+getPriceDiv(config)+'\n\
 			<div class="addInfo" id='+id+'>\n\
 				<p>Continent <b>'+continent+'</b>\n\
 				<p>Os <b>'+os+'</b>\n\
+				<p>Billing <b>'+billing+'</b>\n\
 				<p>'+comment+'</p>\n\
 			</div>\n\
 		</div>\n\
 	</div>';
 	
 	return div;
+}
+
+/* return the price Div */
+function getPriceDiv(config){
+	if(isCurrencyDollar()){//dollar
+		return '<p id=writtenPrice>'+config.price.value+'$</p>'
+	}
+	else{//euro
+		return '<p id=writtenPrice>'+config.priceEuro.value+'&euro;</p>'
+	}
 }
 
 function displayAdditionalInfo(s){

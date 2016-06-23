@@ -16,6 +16,10 @@ ul {
 	display: none; /* Comment to display form*/
 }
 
+.form-group input, .form-group select {
+	display : inline;
+}
+
 div .vertical{
 	display : inline-block;
 }
@@ -79,6 +83,7 @@ div .vertical img, div .vertical input{
 }
 
 .addInfo {
+	overflow-y: scroll;
 	border-style : inset;
 	padding : 15px;
 	display:none;

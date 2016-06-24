@@ -13,6 +13,7 @@ var links = {
 	EApps : "https://portal.eapps.com/order/index.php?pid=74&skip=true",
 	E24Cloud : "https://www.e24cloud.com/en/price-list/",
 	VpsNet : "https://www.vps.net/products/ssd-vps2",
+	ExoScale :"https://www.exoscale.ch/pricing/",
 };
 
 var URI = {

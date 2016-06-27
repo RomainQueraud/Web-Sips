@@ -82,6 +82,11 @@ div .vertical img, div .vertical input{
 	font-weight: bold;
 }
 
+#serverError{
+	color : red;
+	font-weight: bold;
+}
+
 .addInfo {
 	overflow-y: scroll;
 	border-style : inset;

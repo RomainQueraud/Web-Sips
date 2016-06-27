@@ -14,6 +14,8 @@ var links = {
 	E24Cloud : "https://www.e24cloud.com/en/price-list/",
 	VpsNet : "https://www.vps.net/products/ssd-vps2",
 	ExoScale :"https://www.exoscale.ch/pricing/",
+	ZippyCloud : "https://zippycloud.com/",
+	ZettaGrid : "https://account.zettagrid.com/catalog/product/configure/230/3",
 };
 
 var URI = {
@@ -57,7 +59,7 @@ function onLoad(){
 /* ============================================================ */
 
 var baseURI = "http://www.ic4.ie/SIPS/";
-var FusekiServerAdress = "http://localhost:3030/ds/query";
+var FusekiServerAdress = "http://46be081e.ngrok.io/ds/query";
 
 /* ============================================================ */
 
@@ -374,10 +376,18 @@ function sendQuery(){
 			console.log("sendQuery : ERROR")
 			console.log(xhr, resp, text);
 			queryOver = true;
+			errorQuery();
 			$("#loading-image").css("visibility", "hidden"); 
 		}
 	})
 	return configs;
+}
+
+function errorQuery(){
+	var div = '<p id="serverError" class="config">Server unavailable / Wrong SPARQL request</p>';
+	$('.config').remove();
+	var providersDiv = document.getElementById("green-part");
+	providersDiv.insertAdjacentHTML('beforeend', div);
 }
 
 function successQuery(configs){

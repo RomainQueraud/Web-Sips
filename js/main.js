@@ -1,6 +1,9 @@
 // Sliders : http://seiyria.com/bootstrap-slider/
 // Switchs : http://www.bootstrap-switch.org/
 
+var baseURI = "http://www.ic4.ie/SIPS/";
+var FusekiServerAdress = "http://ddda2025.ngrok.io/ds/query";
+
 var URI_windows = "http://dbpedia.org/page/Microsoft_Windows";
 var URI_linux = "http://dbpedia.org/page/Linux";
 
@@ -57,9 +60,6 @@ function onLoad(){
 }
 
 /* ============================================================ */
-
-var baseURI = "http://www.ic4.ie/SIPS/";
-var FusekiServerAdress = "http://46be081e.ngrok.io/ds/query";
 
 /* ============================================================ */
 

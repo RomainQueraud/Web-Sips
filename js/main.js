@@ -20,6 +20,7 @@ var links = {
 	ZippyCloud : "https://zippycloud.com/",
 	ZettaGrid : "https://account.zettagrid.com/catalog/product/configure/230/3",
 	RackSpace : "https://www.rackspace.com/cloud/servers/pricing",
+	ElasticHosts : "https://www.elastichosts.com/pricing/#70+20000,8192,0,0,/,1862,/,-1,-1,0,/,/,0,0,0dal-a",
 };
 
 var URI = {

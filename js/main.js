@@ -19,6 +19,7 @@ var links = {
 	ExoScale :"https://www.exoscale.ch/pricing/",
 	ZippyCloud : "https://zippycloud.com/",
 	ZettaGrid : "https://account.zettagrid.com/catalog/product/configure/230/3",
+	RackSpace : "https://www.rackspace.com/cloud/servers/pricing",
 };
 
 var URI = {

@@ -28,6 +28,7 @@ var links = {
 	CloudAndHeat : "https://www.cloudandheat.com/en/products.html#iaas",
 	VexxHost : "https://vexxhost.com/public-cloud/servers/",
 	LiquidWeb : "https://www.liquidweb.com/dedicated/",
+	Linode : "https://www.linode.com/pricing",
 };
 
 var URI = {

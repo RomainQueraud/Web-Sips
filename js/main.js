@@ -25,6 +25,7 @@ var links = {
 	CityCloud : "https://www.citycloud.com/pricing-gen-one/",
 	DreamHost : "https://www.dreamhost.com/hosting/dedicated/#pricing",
 	CloudWatt : "https://www.cloudwatt.com/en/pricing.html",
+	CloudAndHeat : "https://www.cloudandheat.com/en/products.html#iaas",
 };
 
 var URI = {

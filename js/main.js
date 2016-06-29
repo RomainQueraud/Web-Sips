@@ -27,6 +27,7 @@ var links = {
 	CloudWatt : "https://www.cloudwatt.com/en/pricing.html",
 	CloudAndHeat : "https://www.cloudandheat.com/en/products.html#iaas",
 	VexxHost : "https://vexxhost.com/public-cloud/servers/",
+	LiquidWeb : "https://www.liquidweb.com/dedicated/",
 };
 
 var URI = {

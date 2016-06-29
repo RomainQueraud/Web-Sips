@@ -23,6 +23,7 @@ var links = {
 	ElasticHosts : "https://www.elastichosts.com/pricing/#70+20000,8192,0,0,/,1862,/,-1,-1,0,/,/,0,0,0dal-a",
 	Storm : "https://www.stormondemand.com/manage/signup/configure.html?product=XD.VM&config_id=517&zone_id=27#ssd",
 	CityCloud : "https://www.citycloud.com/pricing-gen-one/",
+	DreamHost : "https://www.dreamhost.com/hosting/dedicated/#pricing",
 };
 
 var URI = {

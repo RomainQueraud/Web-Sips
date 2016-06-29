@@ -24,6 +24,7 @@ var links = {
 	Storm : "https://www.stormondemand.com/manage/signup/configure.html?product=XD.VM&config_id=517&zone_id=27#ssd",
 	CityCloud : "https://www.citycloud.com/pricing-gen-one/",
 	DreamHost : "https://www.dreamhost.com/hosting/dedicated/#pricing",
+	CloudWatt : "https://www.cloudwatt.com/en/pricing.html",
 };
 
 var URI = {

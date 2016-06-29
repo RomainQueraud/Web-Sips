@@ -26,6 +26,7 @@ var links = {
 	DreamHost : "https://www.dreamhost.com/hosting/dedicated/#pricing",
 	CloudWatt : "https://www.cloudwatt.com/en/pricing.html",
 	CloudAndHeat : "https://www.cloudandheat.com/en/products.html#iaas",
+	VexxHost : "https://vexxhost.com/public-cloud/servers/",
 };
 
 var URI = {

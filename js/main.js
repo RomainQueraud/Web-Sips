@@ -2,7 +2,7 @@
 // Switchs : http://www.bootstrap-switch.org/
 
 var baseURI = "http://www.ic4.ie/SIPS/";
-var FusekiServerAdress = "https://cc14d072.ngrok.io/ds/query";
+var FusekiServerAdress = "https://7eaf8c4c.ngrok.io/ds/query";
 
 var URI_windows = "http://dbpedia.org/page/Microsoft_Windows";
 var URI_linux = "http://dbpedia.org/page/Linux";
@@ -147,7 +147,7 @@ function isCurrencyDollar(){
 
 function getSparqlQueryContinent(){
 	var sparqlQuery = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\
-	Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?continent ?os ?priceEuro ?price ?providername ?comment ?billing ?billingDuration\n\
+	Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?hdd ?transfer ?continent ?os ?priceEuro ?price ?providername ?comment ?billing ?billingDuration\n\
 	Where{\n\
 		?providerUri <"+baseURI+"continent> ?continent .\n";
 		
@@ -167,61 +167,67 @@ function getSparqlQueryContinent(){
 /* Return the complete Query String */
 function getSparqlQuery(){
 	var sparqlQuery = "\
-Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?priceEuro ?price ?providername ?comment ?billing ?billingDuration\n\
+Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?hdd ?transfer ?os ?priceEuro ?price ?providername ?comment ?billing ?billingDuration\n\
 Where{\n\
-	?configUri <"+baseURI+"priceEuro> ?priceEuro .\n\
+	?configUri <"+baseURI+"hdd> ?hdd.FILTER((xsd:float(?disk)+xsd:float(?hdd))>="+getDiskValue()+" || ((xsd:float(?disk)=-1) && (xsd:float(?hdd)=-1))) .\n\
 	{\n\
-		Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment ?billing ?billingDuration\n\
+		Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?priceEuro ?price ?providername ?comment ?billing ?billingDuration\n\
 		Where{\n\
-			?providerUri <"+baseURI+"billing> ?billing .\n\
+			?configUri <"+baseURI+"priceEuro> ?priceEuro .\n\
 			{\n\
-				Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment ?billingDuration\n\
+				Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment ?billing ?billingDuration\n\
 				Where{\n\
-					?providerUri <"+baseURI+"billingDuration> ?billingDuration.FILTER(xsd:float(?billingDuration)<="+getBillingDurationValue()+") .\n\
+					?providerUri <"+baseURI+"billing> ?billing .\n\
 					{\n\
-						Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment\n\
+						Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment ?billingDuration\n\
 						Where{\n\
-							?providerUri <"+baseURI+"config> ?configUri .\n\
+							?providerUri <"+baseURI+"billingDuration> ?billingDuration.FILTER(xsd:float(?billingDuration)<="+getBillingDurationValue()+") .\n\
 							{\n\
-								Select ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment\n\
+								Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment\n\
 								Where{\n\
-									?configUri <"+baseURI+"os> ?os.FILTER (CONTAINS(LCASE(str(?os)), '"+getOsValue()+"') || ?os='') .\n\
+									?providerUri <"+baseURI+"config> ?configUri .\n\
 									{\n\
-										Select ?configUri ?id ?cpu ?ram ?disk ?transfer ?price ?providername ?comment\n\
+										Select ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment\n\
 										Where{\n\
-											?configUri <"+baseURI+"id> ?id .\n\
+											?configUri <"+baseURI+"os> ?os.FILTER (CONTAINS(LCASE(str(?os)), '"+getOsValue()+"') || ?os='') .\n\
 											{\n\
-												Select ?configUri ?cpu ?ram ?disk ?transfer ?price ?providername ?comment\n\
+												Select ?configUri ?id ?cpu ?ram ?disk ?transfer ?price ?providername ?comment\n\
 												Where{\n\
-													?configUri <"+baseURI+"comment> ?comment .\n\
+													?configUri <"+baseURI+"id> ?id .\n\
 													{\n\
-														Select ?configUri ?cpu ?ram ?disk ?transfer ?price ?providername\n\
+														Select ?configUri ?cpu ?ram ?disk ?transfer ?price ?providername ?comment\n\
 														Where{\n\
-															?configUri <"+baseURI+"transferSpeed> ?transfer.FILTER(xsd:float(?transfer)>="+getTransferValue()+" || xsd:float(?transfer)=-1) .\n\
+															?configUri <"+baseURI+"comment> ?comment .\n\
 															{\n\
-																Select ?configUri ?cpu ?ram ?disk ?price ?providername\n\
+																Select ?configUri ?cpu ?ram ?disk ?transfer ?price ?providername\n\
 																Where{\n\
-																	?configUri <"+baseURI+"ssd> ?disk.FILTER(xsd:float(?disk)>="+getDiskValue()+" || xsd:float(?disk)=-1) .\n\
+																	?configUri <"+baseURI+"transferSpeed> ?transfer.FILTER(xsd:float(?transfer)>="+getTransferValue()+" || xsd:float(?transfer)=-1) .\n\
 																	{\n\
-																		Select ?configUri ?cpu ?ram ?price ?providername\n\
+																		Select ?configUri ?cpu ?ram ?disk ?price ?providername\n\
 																		Where{\n\
-																			?configUri <"+baseURI+"ram> ?ram.FILTER(xsd:float(?ram)>="+getRamValue()+" || xsd:float(?ram)=-1) .\n\
+																			?configUri <"+baseURI+"ssd> ?disk .\n\
 																			{\n\
-																				Select ?configUri ?cpu ?price ?providername\n\
+																				Select ?configUri ?cpu ?ram ?price ?providername\n\
 																				Where{\n\
-																					?configUri <"+baseURI+"providerName> ?providername .\n\
+																					?configUri <"+baseURI+"ram> ?ram.FILTER(xsd:float(?ram)>="+getRamValue()+" || xsd:float(?ram)=-1) .\n\
 																					{\n\
-																						Select ?configUri ?cpu ?price\n\
+																						Select ?configUri ?cpu ?price ?providername\n\
 																						Where{\n\
-																						  ?configUri <"+baseURI+"price> ?price .\n\
-																						  {\n\
-																							Select ?configUri ?cpu\n\
-																							Where {\n\
-																							  ?configUri <"+baseURI+"cpu> ?cpu.FILTER(xsd:float(?cpu)>="+getCpuValue()+" || xsd:float(?cpu)=-1).\n\
-																							  {\n\
-																							  }\n\
+																							?configUri <"+baseURI+"providerName> ?providername .\n\
+																							{\n\
+																								Select ?configUri ?cpu ?price\n\
+																								Where{\n\
+																								  ?configUri <"+baseURI+"price> ?price .\n\
+																								  {\n\
+																									Select ?configUri ?cpu\n\
+																									Where {\n\
+																									  ?configUri <"+baseURI+"cpu> ?cpu.FILTER(xsd:float(?cpu)>="+getCpuValue()+" || xsd:float(?cpu)=-1).\n\
+																									  {\n\
+																									  }\n\
+																									}\n\
+																								  }\n\
+																								}\n\
 																							}\n\
-																						  }\n\
 																						}\n\
 																					}\n\
 																				}\n\
@@ -289,6 +295,21 @@ function affectValue(value){
 	}
 }
 
+function affectValueDisk(ssd, hdd){
+	if(ssd==-1 && hdd==-1){
+		return "Not available";
+	}
+	else{
+		if(ssd == "-1"){
+			ssd=0;
+		}
+		if(hdd == "-1"){
+			hdd=0;
+		}
+		return parseFloat(ssd) + parseFloat(hdd);
+	}
+}
+
 /* Argument is one configuration 
  Return a constructed <div></div>*/
 function getProviderDiv(config){
@@ -300,7 +321,7 @@ function getProviderDiv(config){
 	var img = "img/"+config.providername.value+".png";
 	var cpu = affectValue(config.cpu.value);
 	var ram = affectValue(config.ram.value);
-	var disk = affectValue(config.disk.value);
+	var disk = affectValueDisk(config.disk.value, config.hdd.value);
 	var transfer = affectValue(config.transfer.value);
 	var continent = affectValue(config.continent.value);
 	var os = affectValue(config.os.value);

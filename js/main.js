@@ -31,6 +31,8 @@ var links = {
 	Linode : "https://www.linode.com/pricing",
 	Joyent : "https://www.joyent.com/pricing",
 	Gigenet : "http://gigenet.com/dedicated-servers/all-servers/",
+	MicrosoftAzure : "https://azure.microsoft.com/en-us/pricing/details/virtual-machines/#Linux",
+	DimensionData : "http://cloud.dimensiondata.com/saas-solutions/services/public-cloud/pricing",
 };
 
 var URI = {
@@ -164,7 +166,7 @@ function getSparqlQueryContinent(){
 		sparqlQuery += "FILTER (CONTAINS(str(?continent), '"+getContinentValue()+"') || ?continent='') .\n";
 	} 
 	
-	sparqlQuery+= "{"+getSparqlQuery()+"}";
+	sparqlQuery+= "{"+getSparqlQuery()+"}\n";
 	
 	sparqlQuery+="\
 	}\n\

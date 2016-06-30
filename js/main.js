@@ -2,7 +2,7 @@
 // Switchs : http://www.bootstrap-switch.org/
 
 var baseURI = "http://www.ic4.ie/SIPS/";
-var FusekiServerAdress = "https://7eaf8c4c.ngrok.io/ds/query";
+var FusekiServerAdress = "https://03ba4fd4.ngrok.io/ds/query";
 
 var URI_windows = "http://dbpedia.org/page/Microsoft_Windows";
 var URI_linux = "http://dbpedia.org/page/Linux";

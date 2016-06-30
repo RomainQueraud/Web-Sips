@@ -29,6 +29,8 @@ var links = {
 	VexxHost : "https://vexxhost.com/public-cloud/servers/",
 	LiquidWeb : "https://www.liquidweb.com/dedicated/",
 	Linode : "https://www.linode.com/pricing",
+	Joyent : "https://www.joyent.com/pricing",
+	Gigenet : "http://gigenet.com/dedicated-servers/all-servers/",
 };
 
 var URI = {

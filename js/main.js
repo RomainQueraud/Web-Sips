@@ -35,6 +35,7 @@ var links = {
 	DimensionData : "http://cloud.dimensiondata.com/saas-solutions/services/public-cloud/pricing",
 	UnitedStack : "https://www.ustack.com/us/uos/price/",
 	Numergy : "https://www.numergy.com/tarifs-cloud-simulateur-prix",
+	Google : "https://cloud.google.com/products/calculator/",
 };
 
 var URI = {

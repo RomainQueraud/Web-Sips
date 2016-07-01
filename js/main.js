@@ -33,6 +33,7 @@ var links = {
 	Gigenet : "http://gigenet.com/dedicated-servers/all-servers/",
 	MicrosoftAzure : "https://azure.microsoft.com/en-us/pricing/details/virtual-machines/#Linux",
 	DimensionData : "http://cloud.dimensiondata.com/saas-solutions/services/public-cloud/pricing",
+	UnitedStack : "https://www.ustack.com/us/uos/price/",
 };
 
 var URI = {

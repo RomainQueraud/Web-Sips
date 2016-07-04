@@ -159,111 +159,40 @@ function isCurrencyDollar(){
 	}
 }
 
-function getSparqlQueryContinent(){
-	var sparqlQuery = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\
-	Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?hdd ?transfer ?continent ?os ?priceEuro ?price ?providername ?comment ?billing ?billingDuration\n\
-	Where{\n\
-		?providerUri <"+baseURI+"continent> ?continent .\n";
-		
-	if(getContinentValue()!= "Any location"){
-		sparqlQuery += "FILTER (CONTAINS(str(?continent), '"+getContinentValue()+"') || ?continent='') .\n";
-	} 
-	
-	sparqlQuery+= "{"+getSparqlQuery()+"}\n";
-	
-	sparqlQuery+="\
-	}\n\
-	";
-	
-	return sparqlQuery;
-}
-
 /* Return the complete Query String */
 function getSparqlQuery(){
-	var sparqlQuery = "\
-Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?hdd ?transfer ?os ?priceEuro ?price ?providername ?comment ?billing ?billingDuration\n\
+	var sparqlQuery = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\
+Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?hdd ?transfer ?continent ?os ?priceEuro ?price ?providername ?comment ?billing ?billingDuration\n\
 Where{\n\
-	?configUri <"+baseURI+"hdd> ?hdd.FILTER((xsd:float(?disk)+xsd:float(?hdd))>="+getDiskValue()+" || ((xsd:float(?disk)=-1) && (xsd:float(?hdd)=-1))) .\n\
-	{\n\
-		Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?priceEuro ?price ?providername ?comment ?billing ?billingDuration\n\
-		Where{\n\
-			?configUri <"+baseURI+"priceEuro> ?priceEuro .\n\
-			{\n\
-				Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment ?billing ?billingDuration\n\
-				Where{\n\
-					?providerUri <"+baseURI+"billing> ?billing .\n\
-					{\n\
-						Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment ?billingDuration\n\
-						Where{\n\
-							?providerUri <"+baseURI+"billingDuration> ?billingDuration.FILTER(xsd:float(?billingDuration)<="+getBillingDurationValue()+") .\n\
-							{\n\
-								Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment\n\
-								Where{\n\
-									?providerUri <"+baseURI+"config> ?configUri .\n\
-									{\n\
-										Select ?configUri ?id ?cpu ?ram ?disk ?transfer ?os ?price ?providername ?comment\n\
-										Where{\n\
-											?configUri <"+baseURI+"os> ?os.FILTER (CONTAINS(LCASE(str(?os)), '"+getOsValue()+"') || ?os='') .\n\
-											{\n\
-												Select ?configUri ?id ?cpu ?ram ?disk ?transfer ?price ?providername ?comment\n\
-												Where{\n\
-													?configUri <"+baseURI+"id> ?id .\n\
-													{\n\
-														Select ?configUri ?cpu ?ram ?disk ?transfer ?price ?providername ?comment\n\
-														Where{\n\
-															?configUri <"+baseURI+"comment> ?comment .\n\
-															{\n\
-																Select ?configUri ?cpu ?ram ?disk ?transfer ?price ?providername\n\
-																Where{\n\
-																	?configUri <"+baseURI+"transferSpeed> ?transfer.FILTER(xsd:float(?transfer)>="+getTransferValue()+" || xsd:float(?transfer)=-1) .\n\
-																	{\n\
-																		Select ?configUri ?cpu ?ram ?disk ?price ?providername\n\
-																		Where{\n\
-																			?configUri <"+baseURI+"ssd> ?disk .\n\
-																			{\n\
-																				Select ?configUri ?cpu ?ram ?price ?providername\n\
-																				Where{\n\
-																					?configUri <"+baseURI+"ram> ?ram.FILTER(xsd:float(?ram)>="+getRamValue()+" || xsd:float(?ram)=-1) .\n\
-																					{\n\
-																						Select ?configUri ?cpu ?price ?providername\n\
-																						Where{\n\
-																							?configUri <"+baseURI+"providerName> ?providername .\n\
-																							{\n\
-																								Select ?configUri ?cpu ?price\n\
-																								Where{\n\
-																								  ?configUri <"+baseURI+"price> ?price .\n\
-																								  {\n\
-																									Select ?configUri ?cpu\n\
-																									Where {\n\
-																									  ?configUri <"+baseURI+"cpu> ?cpu.FILTER(xsd:float(?cpu)>="+getCpuValue()+" || xsd:float(?cpu)=-1).\n\
-																									  {\n\
-																									  }\n\
-																									}\n\
-																								  }\n\
-																								}\n\
-																							}\n\
-																						}\n\
-																					}\n\
-																				}\n\
-																			}\n\
-																		}\n\
-																	}\n\
-																}\n\
-															}\n\
-														}\n\
-													}\n\
-												}\n\
-											}\n\
-										}\n\
-									}\n\
-								}\n\
-							}\n\
-						}\n\
-					}\n\
-				}\n\
-			}\n\
-		}\n\
-	}\n\
+	?configUri <"+baseURI+"hdd> ?hdd .\n\
+	?configUri <"+baseURI+"cpu> ?cpu .\n\
+	?configUri <"+baseURI+"price> ?price .\n\
+	?configUri <"+baseURI+"providerName> ?providername .\n\
+	?configUri <"+baseURI+"ram> ?ram .\n\
+	?configUri <"+baseURI+"ssd> ?disk .\n\
+	?configUri <"+baseURI+"transferSpeed> ?transfer .\n\
+	?configUri <"+baseURI+"comment> ?comment .\n\
+	?configUri <"+baseURI+"id> ?id .\n\
+	?configUri <"+baseURI+"os> ?os .\n\
+	?providerUri <"+baseURI+"continent> ?continent .\n\
+	?providerUri <"+baseURI+"config> ?configUri .\n\
+	?providerUri <"+baseURI+"billingDuration> ?billingDuration.\n\
+	?providerUri <"+baseURI+"billing> ?billing .\n\
+	?configUri <"+baseURI+"priceEuro> ?priceEuro\n\
+	.FILTER((xsd:float(?billingDuration)<="+getBillingDurationValue()+")\
+	  && (CONTAINS(LCASE(str(?os)), '"+getOsValue()+"') || ?os='')";
+	  
+	if(getContinentValue()!= "Any location"){
+		sparqlQuery += "\
+	  && (CONTAINS(str(?continent), '"+getContinentValue()+"') || ?continent='')";
+	} 
+	  
+	sparqlQuery+= "\
+	  && (xsd:float(?transfer)>="+getTransferValue()+" || xsd:float(?transfer)=-1)\
+	  && (xsd:float(?ram)>="+getRamValue()+" || xsd:float(?ram)=-1)\
+	  && (xsd:float(?cpu)>="+getCpuValue()+" || xsd:float(?cpu)=-1)\
+	  && ((xsd:float(?disk)+xsd:float(?hdd))>="+getDiskValue()+" || ((xsd:float(?disk)=-1)\
+	  && (xsd:float(?hdd)=-1)))) \n\
 }\n\
 ";
 	return sparqlQuery;
@@ -389,7 +318,7 @@ function hideAdditionalInfo(s){
 
 /* Fill the textArea with the Query String */
 function fillTextArea(){
-	$('[name=query]').val(getSparqlQueryContinent());
+	$('[name=query]').val(getSparqlQuery());
 }
 
 /* Send the Query to the server and return the list of configurations as a result */

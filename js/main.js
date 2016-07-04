@@ -200,7 +200,7 @@ Where{\n\
 
 function affectValue(value){
 	switch (value){
-		case("-1") : return "Not available";
+		case("-1.0") : return "Not available";
 		break;
 		case("") : return "Not available";
 		break;
@@ -234,7 +234,17 @@ function affectValue(value){
 		break;
 		case(URI["second"]) : return "Second";
 		break;
-		default : return value;
+		default : return removeComma(value);
+	}
+}
+
+/* if value is an integer, set it as an integer */
+function removeComma(value){
+	if((value*10)%10 == 0){
+		return parseInt(value);
+	}
+	else{
+		return value;
 	}
 }
 
@@ -243,13 +253,32 @@ function affectValueDisk(ssd, hdd){
 		return "Not available";
 	}
 	else{
-		if(ssd == "-1"){
+		if(ssd == "-1.0"){
 			ssd=0;
 		}
-		if(hdd == "-1"){
+		if(hdd == "-1.0"){
 			hdd=0;
 		}
 		return parseFloat(ssd) + parseFloat(hdd);
+	}
+}
+
+function getSharedDiv(cpu){
+	if(cpu < 1){
+		return '<p>Shared <b>CPU</b></p>'
+	}
+	else{
+		return '';
+	}
+}
+
+function getTransferP(config){
+	var transfer = affectValue(config.transfer.value);
+	if(config.transfer.value=="-1.0" || config.transfer.value == "-1"){
+		return '<p>Transfer <b> --- </b></p>';
+	}
+	else{
+		return '<p>Transfer <b>'+transfer+'TB</b></p>';
 	}
 }
 
@@ -281,7 +310,7 @@ function getProviderDiv(config){
 			<p>Processor <b>'+cpu+' CPUs</b></p>\n\
 			<p>Ram <b>'+ram+'GB</b></p>\n\
 			<p>Disk <b>'+disk+'GB</b></p>\n\
-			<p>Transfer <b>'+transfer+'TB</b></p>\n\
+			'+getTransferP(config)+'\n\
 			<p> --------- </p>\n\
 			'+getPriceDiv(config)+'\n\
 			<div class="addInfo" id='+id+'>\n\
@@ -289,6 +318,7 @@ function getProviderDiv(config){
 				<p>Os <b>'+os+'</b>\n\
 				<p>Billing <b>'+billing+'</b>\n\
 				<p>'+comment+'</p>\n\
+				'+getSharedDiv(cpu)+'\n\
 			</div>\n\
 		</div>\n\
 	</div>';

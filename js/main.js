@@ -2,7 +2,7 @@
 // Switchs : http://www.bootstrap-switch.org/
 
 var baseURI = "http://www.ic4.ie/SIPS/";
-var FusekiServerAdress = "https://653993d0.ngrok.io/ds/query";
+var FusekiServerAdress = "https://653993d0.ngrok.io";
 
 var URI_windows = "http://dbpedia.org/page/Microsoft_Windows";
 var URI_linux = "http://dbpedia.org/page/Linux";
@@ -73,6 +73,8 @@ function onLoad(){
 	$("[name='currency-checkbox']").on('switchChange.bootstrapSwitch', sendQuery); 
 	$("#continent-select").on('change', sendQuery); 
 	$("#billing-select").on('change', sendQuery); 
+	$("#sparqlA").attr("href", FusekiServerAdress+"/control-panel.tpl");
+	$("#sparql-form").attr("action", FusekiServerAdress+"/ds/query");
 	sendQuery();
 }
 
@@ -358,7 +360,7 @@ function sendQuery(){
 	fillTextArea();
 	$.ajax({
 		async: false,
-		url: FusekiServerAdress, // url where to submit the request
+		url: FusekiServerAdress+"/ds/query", // url where to submit the request
 		type : "GET", // type of action POST || GET
 		dataType : 'json', // data type
 		data : $("#sparql-form").serialize(), // post data || get data

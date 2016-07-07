@@ -2,7 +2,7 @@
 // Switchs : http://www.bootstrap-switch.org/
 
 var baseURI = "http://www.ic4.ie/SIPS/";
-var FusekiServerAdress = "http://ec2-52-41-253-100.us-west-2.compute.amazonaws.com:3030";
+var FusekiServerAdress = "http://romain.hopto.org:3030";
 
 var URI_windows = "http://dbpedia.org/page/Microsoft_Windows";
 var URI_linux = "http://dbpedia.org/page/Linux";
@@ -359,11 +359,12 @@ function sendQuery(){
 	$("#loading-image").css("visibility", "visible"); 
 	fillTextArea();
 	$.ajax({
-		async: false,
+		async: true,
 		url: FusekiServerAdress+"/ds/query", // url where to submit the request
 		type : "GET", // type of action POST || GET
 		dataType : 'json', // data type
 		data : $("#sparql-form").serialize(), // post data || get data
+		timeout: 20000, //milliseconds
 		success : function(result) {
 			console.log("sendQuery : SUCCESS")
 			configs = result.results.bindings;
@@ -372,11 +373,18 @@ function sendQuery(){
 			$("#loading-image").css("visibility", "hidden"); 
 		},
 		error: function(xhr, resp, text) {
+			if(FusekiServerAdress != "http://localhost:3030"){
+				console.log("Distant server not found, switching to localhost");
+				FusekiServerAdress = "http://localhost:3030";
+				sendQuery();
+			}
+			else{
 			console.log("sendQuery : ERROR")
-			console.log(xhr, resp, text);
-			queryOver = true;
-			errorQuery();
-			$("#loading-image").css("visibility", "hidden"); 
+				console.log(xhr, resp, text);
+				queryOver = true;
+				errorQuery();
+				$("#loading-image").css("visibility", "hidden"); 
+			}
 		}
 	})
 	return configs;

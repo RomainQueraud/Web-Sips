@@ -73,7 +73,7 @@ function onLoad(){
 	$("[name='currency-checkbox']").on('switchChange.bootstrapSwitch', sendQuery); 
 	$("#continent-select").on('change', sendQuery); 
 	$("#billing-select").on('change', sendQuery); 
-	$("#sparqlA").attr("href", FusekiServerAdress+"/control-panel.tpl");
+	//$("#sparqlA").attr("href", FusekiServerAdress+"/control-panel.tpl");
 	$("#sparql-form").attr("action", FusekiServerAdress+"/ds/query");
 	sendQuery();
 }

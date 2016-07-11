@@ -16,8 +16,12 @@ ul {
 	text-align : left;
 }
 
+.carousel-control {
+	top : 80%;
+}
+
 .not-displayed {
-	//display: none; /* Comment to display form*/
+	display: none; /* Comment to display form*/
 }
 
 .form-group input, .form-group select {
@@ -45,6 +49,15 @@ div .vertical img, div .vertical input{
 	max-width : 560px;
 }
 
+#chart {
+	min-width : 350px;
+	width : 100%;
+	min-height : 550px;
+	border-radius: 15px;
+	box-shadow: 1px 1px 2px black;
+	display : inline-block;
+}
+
 .slider{
 	display : inline-block;
 	margin : 15px;
@@ -59,9 +72,13 @@ div .vertical img, div .vertical input{
 	border-radius: 50px;
 }
 
+#myCarousel {
+	display : inline-block;
+}
+
 .config {
 	background : white;
-	border-radius : 5%;
+	border-radius: 15px;
 	width: 15rem;
 	margin : 15px;
 	padding : 15px;

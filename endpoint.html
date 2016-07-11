@@ -21,7 +21,7 @@
 		<div id="green-part">
 			<div id="sliders">
 				<form id="sparql-form" action="" method="GET" accept-charset="UTF-8" onsubmit="doSubmit();">
-					<textarea name="query" cols="70" rows="10"></textarea>
+					<textarea name="query" cols="70" rows="10" style="width : 400px; height : 170px;" onfocus="if(this.value==this.defaultValue)this.value='';" onblur="if(this.value=='')this.value=this.defaultValue;">Enter QUERY here</textarea>
 					<br>
 
 					Output: <select name="output">
@@ -46,55 +46,88 @@
 					<input value="Get Results" type="submit">
 				</form>
 			</div>
-			<div class = "config left">
-				<h5>Available properties</h5>
-				<p>
-					&lt;http://www.ic4.ie/SIPS/providerName&gt;<br/>
-					&lt;http://www.ic4.ie/SIPS/id&gt;<br/>
-					&lt;http://www.ic4.ie/SIPS/config&gt;<br/>
-					&lt;http://www.ic4.ie/SIPS/cpu&gt;<br/>
-					&lt;http://www.ic4.ie/SIPS/ram&gt;<br/>
-					&lt;http://www.ic4.ie/SIPS/hdd&gt;<br/>
-					&lt;http://www.ic4.ie/SIPS/ssd&gt;<br/>
-					&lt;http://www.ic4.ie/SIPS/transferSpeed&gt;<br/>
-					&lt;http://www.ic4.ie/SIPS/os&gt;<br/>
-					&lt;http://www.ic4.ie/SIPS/comment&gt;<br/>
-					&lt;http://www.ic4.ie/SIPS/continent&gt;<br/>
-					&lt;http://www.ic4.ie/SIPS/billingDuration&gt;<br/>
-					&lt;http://www.ic4.ie/SIPS/billing&gt;<br/>
-					&lt;http://www.ic4.ie/SIPS/priceEuro&gt;<br/>
-					&lt;http://www.ic4.ie/SIPS/price&gt;<br/>
-				</p>
+			<div id="myCarousel" class="carousel slide" data-ride="carousel">
+				<!-- Indicators -->
+				<ol class="carousel-indicators">
+					<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+					<li data-target="#myCarousel" data-slide-to="1"></li>
+					<li data-target="#myCarousel" data-slide-to="2"></li>
+					<li data-target="#myCarousel" data-slide-to="3"></li>
+				</ol>
+
+				<!-- Wrapper for slides -->
+				<div class="carousel-inner" role="listbox">
+					<div class="item active">
+						<div class = "config left form-based-height">
+							<h5>Available properties</h5>
+							<p>
+								&lt;http://www.ic4.ie/SIPS/providerName&gt;<br/>
+								&lt;http://www.ic4.ie/SIPS/id&gt;<br/>
+								&lt;http://www.ic4.ie/SIPS/config&gt;<br/>
+								&lt;http://www.ic4.ie/SIPS/cpu&gt;<br/>
+								&lt;http://www.ic4.ie/SIPS/ram&gt;<br/>
+								&lt;http://www.ic4.ie/SIPS/hdd&gt;<br/>
+								&lt;http://www.ic4.ie/SIPS/ssd&gt;<br/>
+								&lt;http://www.ic4.ie/SIPS/transferSpeed&gt;<br/>
+								&lt;http://www.ic4.ie/SIPS/os&gt;<br/>
+								&lt;http://www.ic4.ie/SIPS/comment&gt;<br/>
+								&lt;http://www.ic4.ie/SIPS/continent&gt;<br/>
+								&lt;http://www.ic4.ie/SIPS/billingDuration&gt;<br/>
+								&lt;http://www.ic4.ie/SIPS/billing&gt;<br/>
+								&lt;http://www.ic4.ie/SIPS/priceEuro&gt;<br/>
+								&lt;http://www.ic4.ie/SIPS/price&gt;<br/>
+							</p>
+						</div>
+					</div>
+
+					<div class="item">
+						<div class="config left form-based-height">
+							<h5>Select every triple :</h5>
+							<p>select *<br/>where {?s ?p ?o}</p>
+						</div>
+					</div>
+
+					<div class="item">
+						<div class="config left form-based-height">
+							<h5>Select information to display :</h5>
+							<p>
+								select ?configuration ?cores ?ram ?price<br/>
+								where {<br/>
+									&nbsp;&nbsp;&nbsp;&nbsp;?configuration &lt;http://www.ic4.ie/SIPS/cpu&gt; ?cores .<br/>
+									&nbsp;&nbsp;&nbsp;&nbsp;?configuration &lt;http://www.ic4.ie/SIPS/ram&gt; ?ram .<br/>
+									&nbsp;&nbsp;&nbsp;&nbsp;?configuration &lt;http://www.ic4.ie/SIPS/price&gt; ?price<br/>
+								}
+							</p>
+						</div>
+					</div>
+
+					<div class="item">
+						<div class="config left form-based-height">
+							<h5>Filter information to display :</h5>
+							<p>
+								PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;<br/>
+								select ?configuration ?os ?ram ?price<br/>
+								where {<br/>
+									&nbsp;&nbsp;&nbsp;&nbsp;?configuration &lt;http://www.ic4.ie/SIPS/os&gt; ?os .<br/>
+									&nbsp;&nbsp;&nbsp;&nbsp;?configuration &lt;http://www.ic4.ie/SIPS/ram&gt; ?ram .<br/>
+									&nbsp;&nbsp;&nbsp;&nbsp;?configuration &lt;http://www.ic4.ie/SIPS/price&gt; ?price .<br/>
+									&nbsp;&nbsp;&nbsp;&nbsp;FILTER((CONTAINS(LCASE(str(?os)), 'linux') || ?os='') &amp;&amp;<br/>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(xsd:float(?ram)>=0 || xsd:float(?ram)=-1))<br/>
+								}
+							</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- Left and right controls -->
+				<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+					<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+				</a>
+				<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+					<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+				</a>
 			</div>
-			<div class="config left">
-				<h5>Select every triple :</h5>
-				<p>select *<br/>where {?s ?p ?o}</p>
-			</div>
-			<div class="config left">
-				<h5>Select information to display :</h5>
-				<p>
-					select ?configuration ?cores ?ram ?price<br/>
-					where {<br/>
-						&nbsp;&nbsp;&nbsp;&nbsp;?configuration &lt;http://www.ic4.ie/SIPS/cpu&gt; ?cores .<br/>
-						&nbsp;&nbsp;&nbsp;&nbsp;?configuration &lt;http://www.ic4.ie/SIPS/ram&gt; ?ram .<br/>
-						&nbsp;&nbsp;&nbsp;&nbsp;?configuration &lt;http://www.ic4.ie/SIPS/price&gt; ?price<br/>
-					}
-				</p>
-			</div>
-			<div class="config left">
-				<h5>Filter information to display :</h5>
-				<p>
-					PREFIX xsd: &lt;http://www.w3.org/2001/XMLSchema#&gt;<br/>
-					select ?configuration ?os ?ram ?price<br/>
-					where {<br/>
-						&nbsp;&nbsp;&nbsp;&nbsp;?configuration &lt;http://www.ic4.ie/SIPS/os&gt; ?os .<br/>
-						&nbsp;&nbsp;&nbsp;&nbsp;?configuration &lt;http://www.ic4.ie/SIPS/ram&gt; ?ram .<br/>
-						&nbsp;&nbsp;&nbsp;&nbsp;?configuration &lt;http://www.ic4.ie/SIPS/price&gt; ?price .<br/>
-						&nbsp;&nbsp;&nbsp;&nbsp;FILTER((CONTAINS(LCASE(str(?os)), 'linux') || ?os='') &amp;&amp;<br/>
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(xsd:float(?ram)>=0 || xsd:float(?ram)=-1))<br/>
-					}
-				</p>
-			</div>
+			<div style="margin: 10px; position: relative;"><iframe allowfullscreen id="chart" frameborder="0" src="https://www.lucidchart.com/documents/embeddedchart/ba1f3931-fecc-4b2b-a912-5081e6975b89" id="xL_yYAgXFgEw"></iframe></div>
 		</div>
 		
 	</body>

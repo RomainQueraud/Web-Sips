@@ -1,8 +1,16 @@
 var FusekiServerAdress = "http://romain.hopto.org:3030";
 var ajaxTest = true;
 
+$(document).ready(function() {
+         $('.carousel').carousel({
+             interval: 3000
+         })
+    }
+);    
+
 function onLoad(){
 	$("#sparql-form").attr("action", FusekiServerAdress+"/ds/query");
+	$(".form-based-height").css("height", $("#sparql-form").css("height"));
 }
 
 function doSubmit(){
@@ -14,7 +22,7 @@ function doSubmit(){
 			url: FusekiServerAdress+"/ds/query", // url where to submit the request
 			type : "GET", // type of action POST || GET
 			dataType : 'json', // data typeform").serialize(), // post data || get data
-			timeout: 2000, //milliseconds
+			timeout: 4000, //milliseconds
 			success : function(result) {
 				$("#sparql-form").submit();
 			},

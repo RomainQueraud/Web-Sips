@@ -364,7 +364,7 @@ function sendQuery(){
 		type : "GET", // type of action POST || GET
 		dataType : 'json', // data type
 		data : $("#sparql-form").serialize(), // post data || get data
-		timeout: 20000, //milliseconds
+		timeout: 4000, //milliseconds
 		success : function(result) {
 			console.log("sendQuery : SUCCESS")
 			configs = result.results.bindings;

@@ -10,7 +10,7 @@ $(document).ready(function() {
 
 function onLoad(){
 	console.log("href : "+window.location.href );
-	if(window.location.href.includes("github.com")){
+	if(window.location.href.includes("github")){
 		window.location.href = "http://ic4-sips.s3-website-eu-west-1.amazonaws.com/endpoint.html";
 	}
 	$("#sparql-form").attr("action", FusekiServerAdress+"/ds/query");

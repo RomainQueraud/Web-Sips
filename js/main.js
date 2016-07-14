@@ -63,8 +63,9 @@ var URI = {
 }
 
 function onLoad(){
+	console.log
 	console.log("href : "+window.location.href );
-	if(window.location.href.includes("github.com")){
+	if(window.location.href.includes("github")){
 		window.location.href = "http://ic4-sips.s3-website-eu-west-1.amazonaws.com/";
 	}
 	$('[name=cpuSlider]').slider().on('slideStop', sendQuery);

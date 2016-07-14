@@ -63,6 +63,10 @@ var URI = {
 }
 
 function onLoad(){
+	console.log("href : "+window.location.href );
+	if(window.location.href.includes("github.com")){
+		window.location.href = "http://ic4-sips.s3-website-eu-west-1.amazonaws.com/";
+	}
 	$('[name=cpuSlider]').slider().on('slideStop', sendQuery);
 	$('[name=ramSlider]').slider().on('slideStop', sendQuery);
 	$('[name=diskSlider]').slider().on('slideStop', sendQuery);
@@ -364,7 +368,7 @@ function sendQuery(){
 		type : "GET", // type of action POST || GET
 		dataType : 'json', // data type
 		data : $("#sparql-form").serialize(), // post data || get data
-		timeout: 4000, //milliseconds
+		timeout: 10000, //milliseconds
 		success : function(result) {
 			console.log("sendQuery : SUCCESS")
 			configs = result.results.bindings;
@@ -391,7 +395,7 @@ function sendQuery(){
 }
 
 function errorQuery(){
-	var div = '<p id="serverError" class="config">Server unavailable / Wrong SPARQL request</p>';
+	var div = '<p id="serverError" class="config">Server is turned off, please contact the administrator</p>';
 	$('.config').remove();
 	var providersDiv = document.getElementById("green-part");
 	providersDiv.insertAdjacentHTML('beforeend', div);

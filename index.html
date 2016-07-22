@@ -18,7 +18,15 @@
 		<ul class="nav nav-pills">
 		  <li role="presentation" class="active"><a href="#">Pricing</a></li>
 		  <li role="presentation"><a id="sparqlA" href="endpoint.html">SPARQL</a></li>
+		  <li role="presentation"><a id="buttonModal" href="#">About</a></li>
 		</ul>
+		
+		<div id="aboutModal" class="modal">
+		  <div class="modal-content">
+			<span id="closeModal" class="close">x</span>
+			<p>Some text in the Modal..</p>
+		  </div>
+		</div>
 		
         <form id="sparql-form" class="not-displayed" action="" method="GET" accept-charset="UTF-8">
             <textarea name="query" cols="70" rows="10"></textarea>
@@ -131,6 +139,7 @@
 					</div>
 					<input type="checkbox" name="os-checkbox" data-off-text="Linux" data-on-text="Windows" checked>
 					<input type="checkbox" name="currency-checkbox" data-off-text="&euro;" data-on-text="$" checked>
+					<input type="checkbox" name="display-checkbox" data-off-text="&#9776;" data-on-text="&#9783;" checked>
 				</div>
 			</div>
 		</div>

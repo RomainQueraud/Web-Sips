@@ -68,6 +68,8 @@ function onLoad(){
 	if(window.location.href.includes("github")){
 		window.location.href = "http://ic4-sips.s3-website-eu-west-1.amazonaws.com/";
 	}
+	$("#closeModal").on('click', closeModal);
+	$("#buttonModal").on('click', openModal);
 	$('[name=cpuSlider]').slider().on('slideStop', sendQuery);
 	$('[name=ramSlider]').slider().on('slideStop', sendQuery);
 	$('[name=diskSlider]').slider().on('slideStop', sendQuery);
@@ -75,7 +77,9 @@ function onLoad(){
 	$("[name='os-checkbox']").bootstrapSwitch('state', false);
 	$("[name='os-checkbox']").on('switchChange.bootstrapSwitch', sendQuery); 
 	$("[name='currency-checkbox']").bootstrapSwitch('state', false);
-	$("[name='currency-checkbox']").on('switchChange.bootstrapSwitch', sendQuery); 
+	$("[name='currency-checkbox']").on('switchChange.bootstrapSwitch', sendQuery);
+	$("[name='display-checkbox']").bootstrapSwitch('state', true);
+	$("[name='display-checkbox']").on('switchChange.bootstrapSwitch', sendQuery); 
 	$("#continent-select").on('change', sendQuery); 
 	$("#billing-select").on('change', sendQuery); 
 	//$("#sparqlA").attr("href", FusekiServerAdress+"/control-panel.tpl");
@@ -84,6 +88,17 @@ function onLoad(){
 }
 
 /* ============================================================ */
+
+function openModal(){
+	console.log("OpenModal in");
+	$("#aboutModal").css("display", "block");
+	console.log("OpenModal out");
+	return false;
+}
+
+function closeModal(){
+    $("#aboutModal").css("display", "none");
+}
 
 /* ============================================================ */
 
@@ -166,6 +181,16 @@ function isCurrencyDollar(){
 	}
 }
 
+function isDisplayBoxs(){
+	var checked = ($('[name=display-checkbox]').bootstrapSwitch('state'));
+	if(checked){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+
 /* Return the complete Query String */
 function getSparqlQuery(){
 	var sparqlQuery = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\
@@ -207,9 +232,9 @@ Where{\n\
 
 function affectValue(value){
 	switch (value){
-		case("-1.0") : return "Not available";
+		case("-1.0") : return "NA";
 		break;
-		case("") : return "Not available";
+		case("") : return "NA";
 		break;
 		case(URI_windows) : return "Windows";
 		break;
@@ -301,6 +326,8 @@ function getProviderDiv(config){
 	var cpu = affectValue(config.cpu.value);
 	var ram = affectValue(config.ram.value);
 	var disk = affectValueDisk(config.disk.value, config.hdd.value);
+	var ssd = affectValue(config.disk.value);
+	var hdd = affectValue(config.hdd.value);
 	var transfer = affectValue(config.transfer.value);
 	var continent = affectValue(config.continent.value);
 	var os = affectValue(config.os.value);
@@ -308,27 +335,53 @@ function getProviderDiv(config){
 	var billingDuration = config.billingDuration.value;
 	var billing = affectValue(config.billing.value);
 	
-	var div = '\
-	<div class="config" onmouseover="displayAdditionalInfo('+id+')" onmouseout="hideAdditionalInfo('+id+')">\n\
-		<a href="'+links[providerName]+'">\n\
-			<img src="'+img+'" alt="Provider image">\n\
-		</a>\n\
-		<div class="details">\n\
-			<p>Processor <b>'+cpu+' CPUs</b></p>\n\
-			<p>Ram <b>'+ram+'GB</b></p>\n\
-			<p>Disk <b>'+disk+'GB</b></p>\n\
-			'+getTransferP(config)+'\n\
-			<p> --------- </p>\n\
-			'+getPriceDiv(config)+'\n\
-			<div class="addInfo" id='+id+'>\n\
-				<p>Continent <b>'+continent+'</b>\n\
-				<p>Os <b>'+os+'</b>\n\
-				<p>Billing <b>'+billing+'</b>\n\
-				<p>'+comment+'</p>\n\
-				'+getSharedDiv(cpu)+'\n\
+	if(isDisplayBoxs()){
+		var div = '\
+		<div class="config" onmouseover="displayAdditionalInfo('+id+')" onmouseout="hideAdditionalInfo('+id+')">\n\
+			<a href="'+links[providerName]+'">\n\
+				<img src="'+img+'" alt="Provider image">\n\
+			</a>\n\
+			<div class="details">\n\
+				<p>Processor <b>'+cpu+' CPUs</b></p>\n\
+				<p>Ram <b>'+ram+'GB</b></p>\n\
+				<p>Disk <b>'+disk+'GB</b></p>\n\
+				'+getTransferP(config)+'\n\
+				<p> --------- </p>\n\
+				'+getPriceDiv(config)+'\n\
+				<div class="addInfo" id='+id+'>\n\
+					<p>Continent <b>'+continent+'</b>\n\
+					<p>Os <b>'+os+'</b>\n\
+					<p>Billing <b>'+billing+'</b>\n\
+					<p>'+comment+'</p>\n\
+					'+getSharedDiv(cpu)+'\n\
+				</div>\n\
 			</div>\n\
-		</div>\n\
-	</div>';
+		</div>';
+	}
+	else{ //Display line
+		var div = '\
+		<tr>\n\
+			<th scope="row">\n\
+				<a href="'+links[providerName]+'">\n\
+					<img src="'+img+'" alt="Provider image">\n\
+				</a>\n\
+			</th>\n\
+			<td>'+cpu+'</td>\n\
+			<td>'+ram+'</td>\n\
+			<td>'+ssd+'</td>\n\
+			<td>'+hdd+'</td>\n\
+			<td>'+transfer+'</td>\n\
+			<td>\n\
+				<div style="overflow-y: scroll; height:90px">\n\
+					<p>Continent <b>'+continent+'</b>\n\
+					<p>Os <b>'+os+'</b>\n\
+					<p>Billing <b>'+billing+'</b>\n\
+					<p>'+comment+'</p>\n\
+					'+getSharedDiv(cpu)+'\n\
+				</div>\n\
+			</td>\n\
+		</tr>';
+	}
 	
 	return div;
 }
@@ -408,6 +461,27 @@ function successQuery(configs){
 	var providersDiv = document.getElementById("green-part");
 	//$('#providers').html(''); //JQuery //Remove the old configurations
 	$('.config').remove();
+	if(!isDisplayBoxs()){
+		var div = '<div id="table-configs" class="config">\
+						<table class="table">\
+						  <thead class="thead-inverse">\
+							<tr>\
+							  <th>Provider</th>\
+							  <th>CPU</th>\
+							  <th>RAM</th>\
+							  <th>SSD</th>\
+							  <th>SSD</th>\
+							  <th>Transfer</th>\
+							  <th>Additional</th>\
+							</tr>\
+						  </thead>\
+						  <tbody id="table-configs-tbody">\
+						  </tbody>\
+						</table>\
+					</div>';
+		providersDiv.insertAdjacentHTML('beforeend', div);
+		providersDiv = document.getElementById("table-configs-tbody");
+	}
 	for(var i=0 ; i<configs.length ; i++){
 		var config = configs[i];
 		var div = getProviderDiv(config);

@@ -68,6 +68,7 @@ function onLoad(){
 	if(window.location.href.includes("github")){
 		window.location.href = "http://ic4-sips.s3-website-eu-west-1.amazonaws.com/";
 	}
+	$("#print-btn").on('click', printReport);
 	$("#closeModal").on('click', closeModal);
 	$("#buttonModal").on('click', openModal);
 	$("#aboutModal").on('click', closeModalAbout);
@@ -91,9 +92,7 @@ function onLoad(){
 /* ============================================================ */
 
 function openModal(){
-	console.log("OpenModal in");
-	$("#aboutModal").css("display", "block");
-	console.log("OpenModal out");
+	$(".modal").css("display", "block");
 	return false;
 }
 
@@ -104,7 +103,12 @@ function closeModalAbout(e){
 }
 
 function closeModal(){
-    $("#aboutModal").css("display", "none");
+    $(".modal").css("display", "none");
+}
+
+function printReport(){
+	window.print();
+	return false;
 }
 
 /* ============================================================ */
@@ -346,7 +350,8 @@ function getProviderDiv(config){
 		var div = '\
 		<div class="config" onmouseover="displayAdditionalInfo('+id+')" onmouseout="hideAdditionalInfo('+id+')">\n\
 			<a href="'+links[providerName]+'">\n\
-				<img src="'+img+'" alt="Provider image">\n\
+				<img src="'+img+'" alt="'+providerName+'">\n\
+				<p class="alt-img">'+providerName+'</p>\n\
 			</a>\n\
 			<div class="details">\n\
 				<p>Processor <b>'+cpu+' CPUs</b></p>\n\
@@ -371,6 +376,7 @@ function getProviderDiv(config){
 			<th scope="row">\n\
 				<a href="'+links[providerName]+'">\n\
 					<img src="'+img+'" alt="Provider image">\n\
+					<p class="alt-img">'+providerName+'</p>\n\
 				</a>\n\
 			</th>\n\
 			<td>'+cpu+'</td>\n\
@@ -378,6 +384,7 @@ function getProviderDiv(config){
 			<td>'+ssd+'</td>\n\
 			<td>'+hdd+'</td>\n\
 			<td>'+transfer+'</td>\n\
+			<td>'+getPriceDiv(config)+'</td>\n\
 			<td>\n\
 				<div style="overflow-y: scroll; height:90px">\n\
 					<p>Continent <b>'+continent+'</b>\n\
@@ -395,11 +402,21 @@ function getProviderDiv(config){
 
 /* return the price Div */
 function getPriceDiv(config){
-	if(isCurrencyDollar()){//dollar
-		return '<p id=writtenPrice>'+config.price.value+'$</p>'
+	if(isDisplayBoxs()){ //Boxs
+		if(isCurrencyDollar()){//dollar
+			return '<p id=writtenPrice>'+config.price.value+'$</p>'
+		}
+		else{//euro
+			return '<p id=writtenPrice>'+config.priceEuro.value+'&euro;</p>'
+		}
 	}
-	else{//euro
-		return '<p id=writtenPrice>'+config.priceEuro.value+'&euro;</p>'
+	else{ //Lists
+		if(isCurrencyDollar()){//dollar
+			return '<p>'+config.price.value+'$</p>'
+		}
+		else{//euro
+			return '<p>'+config.priceEuro.value+'&euro;</p>'
+		}
 	}
 }
 
@@ -480,6 +497,7 @@ function successQuery(configs){
 							  <th>SSD</th>\
 							  <th>SSD</th>\
 							  <th>Transfer</th>\
+							  <th>Price</th>\
 							  <th>Additional</th>\
 							</tr>\
 						  </thead>\

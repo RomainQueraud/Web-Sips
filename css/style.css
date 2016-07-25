@@ -16,6 +16,10 @@ ul {
 	text-align : left;
 }
 
+.alt-img {
+	display: none;
+}
+
 .carousel-control {
 	top : 80%;
 }

@@ -21,9 +21,7 @@ function onLoad(){
 }
 
 function openModal(){
-	console.log("OpenModal in");
-	$("#aboutModal").css("display", "block");
-	console.log("OpenModal out");
+	$(".modal").css("display", "block");
 	return false;
 }
 
@@ -34,7 +32,7 @@ function closeModalAbout(e){
 }
 
 function closeModal(){
-    $("#aboutModal").css("display", "none");
+    $(".modal").css("display", "none");
 }
 
 function doSubmit(){

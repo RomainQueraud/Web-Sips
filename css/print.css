@@ -1,0 +1,42 @@
+img {
+	display:none;
+}
+
+.not-displayed {
+	display: none;
+}
+
+.nav {
+	display: none;
+}
+
+#sliders {
+	display: none;
+}
+
+#closeModal {
+	display: none;
+}
+
+h1 {
+	display: none;
+}
+
+.alt-img {
+	display: inline;
+}
+
+.config {
+	display : block;
+	border-style: solid;
+	border-width: 2px;
+}
+
+.config p{
+	display : inline;
+}
+
+.config p:before {
+    content: "\00BB";
+    margin-right: 6px;
+}

@@ -464,6 +464,7 @@ function errorQuery(){
 
 function successQuery(configs){
 	configs = getOptimizedConfigs(configs);
+	configs = sortConfigs(configs);
 	console.log(configs);
 	var providersDiv = document.getElementById("green-part");
 	//$('#providers').html(''); //JQuery //Remove the old configurations
@@ -517,6 +518,19 @@ function getOptimizedConfigs(configs){
 	}
 	newConfigs = newConfigs.sort();
 	return newConfigs;
+}
+
+function sortConfigs(configs){
+	for(var i=0 ; i<configs.length ; i++){
+		for(var j=i ; j<configs.length ; j++){
+			if(parseFloat(configs[j].price.value) < parseFloat(configs[i].price.value) && parseFloat(configs[i].price.value) != 0.0 && parseFloat(configs[j].price.value) != 0.0){
+				var tmpConfig = configs[j];
+				configs[j] = configs[i];
+				configs[i] = tmpConfig;
+			}
+		}
+	}
+	return configs;
 }
 
 /* ============================================================ */

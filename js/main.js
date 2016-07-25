@@ -70,6 +70,7 @@ function onLoad(){
 	}
 	$("#closeModal").on('click', closeModal);
 	$("#buttonModal").on('click', openModal);
+	$("#aboutModal").on('click', closeModalAbout);
 	$('[name=cpuSlider]').slider().on('slideStop', sendQuery);
 	$('[name=ramSlider]').slider().on('slideStop', sendQuery);
 	$('[name=diskSlider]').slider().on('slideStop', sendQuery);
@@ -94,6 +95,12 @@ function openModal(){
 	$("#aboutModal").css("display", "block");
 	console.log("OpenModal out");
 	return false;
+}
+
+function closeModalAbout(e){
+	if(!$(e.target).is("#modal-text") && !$(e.target).is("#modal-title")){
+		closeModal();
+	}
 }
 
 function closeModal(){

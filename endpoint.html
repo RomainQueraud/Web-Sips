@@ -14,7 +14,23 @@
 		<ul class="nav nav-pills">
 		  <li role="presentation"><a href="index.html">Pricing</a></li>
 		  <li role="presentation" class="active"><a id="sparqlA" href="#">SPARQL</a></li>
+		  <li role="presentation"><a id="buttonModal" href="#">About</a></li>
 		</ul>
+		
+		<div id="aboutModal" class="modal">
+		  <div class="modal-content">
+			<div class="modal-header">
+				<span id="closeModal" class="close">x</span>
+				<h2 id="modal-title">About the Semantic IaaS Pricing Service</h2>
+			</div>
+			<p id="modal-text">
+				Some independent sources provide an interface for comparing the prices and specifications of IaaS offerings across multiple cloud providers.<br/>
+				However, these services are intended for consumption by human operators. SIPS, the <b>Semantic IaaS Pricing Service</b>, provides an online catalogue of IaaS offerings that updates itself automatically and can be queried using semantic web technologies such as SPARQL. For example, the service would allow the following query, expressed as SPARQL, to be answered: "what virtual machine offerings are available on an hourly basis in Europe", and the result would indicate available offerings, pricing and terms of usage.<br/>
+				A microservice architecture is used where a proxy service is implemented for each available cloud provider. Web-crawlers with Selenium are also used. These are responsible for gathering up-to-date pricing and terms of service information using web scrapers. Semantic querying is implemented using the Jena open source semantic web framework.<br/>
+				A web-front end is provided that allows users to consume the service using their web browsers.
+			</p>
+		  </div>
+		</div>
 		
 		<h1> Enter your SPARQL query </h1>
 		

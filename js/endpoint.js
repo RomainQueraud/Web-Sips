@@ -13,8 +13,28 @@ function onLoad(){
 	if(window.location.href.includes("github")){
 		window.location.href = "http://ic4-sips.s3-website-eu-west-1.amazonaws.com/endpoint.html";
 	}
+	$("#closeModal").on('click', closeModal);
+	$("#buttonModal").on('click', openModal);
+	$("#aboutModal").on('click', closeModalAbout);
 	$("#sparql-form").attr("action", FusekiServerAdress+"/ds/query");
 	$(".form-based-height").css("height", $("#sparql-form").css("height"));
+}
+
+function openModal(){
+	console.log("OpenModal in");
+	$("#aboutModal").css("display", "block");
+	console.log("OpenModal out");
+	return false;
+}
+
+function closeModalAbout(e){
+	if(!$(e.target).is("#modal-text") && !$(e.target).is("#modal-title")){
+		closeModal();
+	}
+}
+
+function closeModal(){
+    $("#aboutModal").css("display", "none");
 }
 
 function doSubmit(){

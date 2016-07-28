@@ -20,6 +20,7 @@
 		  <li role="presentation" class="active"><a href="#">Pricing</a></li>
 		  <li role="presentation"><a id="sparqlA" href="endpoint.html">SPARQL</a></li>
 		  <li role="presentation"><a id="buttonModal" href="#">About</a></li>
+		  <li role="presentation"><a href="mailto:romain.queraud@etudiant.mines-nantes.fr">Contact</a></li>
 		</ul>
 		
 		<div id="aboutModal" class="modal">
@@ -33,6 +34,11 @@
 				However, these services are intended for consumption by human operators. SIPS, the <b>Semantic IaaS Pricing Service</b>, provides an online catalogue of IaaS offerings that updates itself automatically and can be queried using semantic web technologies such as SPARQL. For example, the service would allow the following query, expressed as SPARQL, to be answered: "what virtual machine offerings are available on an hourly basis in Europe", and the result would indicate available offerings, pricing and terms of usage.<br/>
 				A microservice architecture is used where a proxy service is implemented for each available cloud provider. Web-crawlers with Selenium are also used. These are responsible for gathering up-to-date pricing and terms of service information using web scrapers. Semantic querying is implemented using the Jena open source semantic web framework.<br/>
 				A web-front end is provided that allows users to consume the service using their web browsers.
+			</p>
+			<p id="modal-date">
+				Date of the last update can be found in the date property of each provider.
+				<ul id="modal-ul">
+				</ul>
 			</p>
 		  </div>
 		</div>
@@ -57,7 +63,11 @@
     	    <input value="Get Results" type="submit">
         </form>
 		
-		<h1> Select your Configuration </h1>
+		<div id="title-div">
+			<div class="img-div"><a href="http://www.ic4.ie/"><img class="logo" src="img/IC4.png"></a></div>
+			<div class="h1-div"><h1>Semantic IaaS Pricing Service</h1></div>
+			<div class="img-div"><a href="http://www.rendicity.com/"><img class="logo" src="img/Rendicity.png"></a></div>
+		</div>
 		
 		<div id="green-part">
 			<div id="sliders">
@@ -149,9 +159,12 @@
 					<input type="checkbox" name="os-checkbox" data-off-text="Linux" data-on-text="Windows" checked>
 					<input type="checkbox" name="currency-checkbox" data-off-text="&euro;" data-on-text="$" checked>
 					<input type="checkbox" name="display-checkbox" data-off-text="&#9776;" data-on-text="&#9783;" checked>
-					<p>
+					<p id="print-div">
 						<a id="print-btn" href="#" class="btn btn-success btn-lg">
 							<span class="glyphicon glyphicon-print"></span> Print
+						</a>
+						<a id="csv-btn" href="#" class="btn btn-success btn-lg">
+							<span class="glyphicon glyphicon-print"></span> CSV
 						</a>
 					</p>
 				</div>

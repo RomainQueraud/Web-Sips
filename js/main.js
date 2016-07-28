@@ -7,6 +7,8 @@ var FusekiServerAdress = "http://romain.hopto.org:3030";
 var URI_windows = "http://dbpedia.org/page/Microsoft_Windows";
 var URI_linux = "http://dbpedia.org/page/Linux";
 
+var csvContent;
+
 var links = {
 	CloudWare : "https://client.cloudware.bg/index.php?/cart/-lang-c_cloudservers-/&step=0&languagechange=English",
 	Atlantic : "https://www.atlantic.net/cloud-hosting/pricing/",
@@ -36,6 +38,7 @@ var links = {
 	UnitedStack : "https://www.ustack.com/us/uos/price/",
 	Numergy : "https://www.numergy.com/tarifs-cloud-simulateur-prix",
 	Google : "https://cloud.google.com/products/calculator/",
+	Amazon : "https://aws.amazon.com/ec2/pricing/",
 };
 
 var URI = {
@@ -63,12 +66,11 @@ var URI = {
 }
 
 function onLoad(){
-	console.log
-	console.log("href : "+window.location.href );
 	if(window.location.href.includes("github")){
 		window.location.href = "http://ic4-sips.s3-website-eu-west-1.amazonaws.com/";
 	}
 	$("#print-btn").on('click', printReport);
+	$("#csv-btn").on('click', exportToCsv);
 	$("#closeModal").on('click', closeModal);
 	$("#buttonModal").on('click', openModal);
 	$("#aboutModal").on('click', closeModalAbout);
@@ -92,7 +94,8 @@ function onLoad(){
 /* ============================================================ */
 
 function openModal(){
-	$(".modal").css("display", "block");
+	//$(".modal").css("display", "block");
+	$(".modal").attr("class", "modal displayed");
 	return false;
 }
 
@@ -103,7 +106,7 @@ function closeModalAbout(e){
 }
 
 function closeModal(){
-    $(".modal").css("display", "none");
+    $(".modal").attr("class", "modal");
 }
 
 function printReport(){
@@ -133,19 +136,19 @@ function getTransferValue(){
 function getContinentValue(){
 	var sel = document.getElementById('continent-select');
 	switch(sel.value){
-		case "Africa" : console.log(URI["africa"]); return URI["africa"];
+		case "Africa" : return URI["africa"];
 		break;
-		case "Australia" : console.log(URI["australia"]); return URI["australia"];
+		case "Australia" : return URI["australia"];
 		break;
-		case "Asia" : console.log(URI["asia"]); return URI["asia"];
+		case "Asia" : return URI["asia"];
 		break;
-		case "Europe" : console.log(URI["europe"]); return URI["europe"];
+		case "Europe" : return URI["europe"];
 		break;
-		case "North America" : console.log(URI["northAmerica"]); return URI["northAmerica"];
+		case "North America" : return URI["northAmerica"];
 		break;
-		case "South America" : console.log(URI["southAmerica"]); return URI["southAmerica"];
+		case "South America" : return URI["southAmerica"];
 		break;
-		case "Any location" : console.log("Any location"); return "Any location";
+		case "Any location" : return "Any location";
 		break;
 		default : throw "Unknown continent";
 	}
@@ -154,19 +157,19 @@ function getContinentValue(){
 function getBillingDurationValue(){
 	var sel = document.getElementById('billing-select');
 	switch(sel.value){
-		case "Billing any" : console.log("billingDuration : "+1000); return 1000; //Max value
+		case "Billing any" : return 1000; //Max value
 		break;
-		case "Billing year" : console.log("billingDuration : "+URI["yearDuration"]); return URI["yearDuration"];
+		case "Billing year" : return URI["yearDuration"];
 		break;
-		case "Billing month" : console.log("billingDuration : "+URI["monthDuration"]); return URI["monthDuration"];
+		case "Billing month" : return URI["monthDuration"];
 		break;
-		case "Billing day" : console.log("billingDuration : "+URI["dayDuration"]); return URI["dayDuration"];
+		case "Billing day" : return URI["dayDuration"];
 		break;
-		case "Billing hour" : console.log("billingDuration : "+URI["hourDuration"]); return URI["hourDuration"];
+		case "Billing hour" : return URI["hourDuration"];
 		break;
-		case "Billing minute" : console.log("billingDuration : "+URI["minuteDuration"]); return URI["minuteDuration"];
+		case "Billing minute" : return URI["minuteDuration"];
 		break;
-		case "Billing second" : console.log("billingDuration : "+URI["secondDuration"]); return URI["secondDuration"];
+		case "Billing second" : return URI["secondDuration"];
 		break;
 		default : throw "Unknown billing";
 	}
@@ -205,7 +208,7 @@ function isDisplayBoxs(){
 /* Return the complete Query String */
 function getSparqlQuery(){
 	var sparqlQuery = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\
-Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?hdd ?transfer ?continent ?os ?priceEuro ?price ?providername ?comment ?billing ?billingDuration\n\
+Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?hdd ?transfer ?continent ?os ?priceEuro ?price ?providername ?comment ?billing ?billingDuration ?date\n\
 Where{\n\
 	?configUri <"+baseURI+"hdd> ?hdd .\n\
 	?configUri <"+baseURI+"cpu> ?cpu .\n\
@@ -218,6 +221,7 @@ Where{\n\
 	?configUri <"+baseURI+"id> ?id .\n\
 	?configUri <"+baseURI+"os> ?os .\n\
 	?providerUri <"+baseURI+"continent> ?continent .\n\
+	?providerUri <"+baseURI+"date> ?date .\n\
 	?providerUri <"+baseURI+"config> ?configUri .\n\
 	?providerUri <"+baseURI+"billingDuration> ?billingDuration.\n\
 	?providerUri <"+baseURI+"billing> ?billing .\n\
@@ -325,9 +329,23 @@ function getTransferP(config){
 	}
 }
 
+function getDisplayDiv(){
+	if(isDisplayBoxs()){
+		return "";
+	}
+	else{
+		return " boxState"; //space is because it is the second class
+	}
+}
+
+function resetCsvContent(){
+	csvContent = "Name,CPU,RAM(GB),SSD(GB),HDD(GB),Transfer(TB),OS,Price(Euro),Date\n";
+}
+
 /* Argument is one configuration 
+	box is true or false
  Return a constructed <div></div>*/
-function getProviderDiv(config){
+function getProviderDiv(config, box){
 	//TODO add the switch for the currency
 	var providerUri = config.providerUri.value;
 	var configUri = config.configUri.value;
@@ -345,10 +363,14 @@ function getProviderDiv(config){
 	var comment = config.comment.value;
 	var billingDuration = config.billingDuration.value;
 	var billing = affectValue(config.billing.value);
+	var date = affectValue(config.date.value);
+	var price = affectValue(config.price.value);
 	
-	if(isDisplayBoxs()){
+	csvContent += providerName+","+cpu+","+ram+","+ssd+","+hdd+","+transfer+","+os+","+price+","+date+"\n";
+	
+	if(box){
 		var div = '\
-		<div class="config" onmouseover="displayAdditionalInfo('+id+')" onmouseout="hideAdditionalInfo('+id+')">\n\
+		<div class="config'+getDisplayDiv()+'" onmouseover="displayAdditionalInfo('+id+')" onmouseout="hideAdditionalInfo('+id+')">\n\
 			<a href="'+links[providerName]+'">\n\
 				<img src="'+img+'" alt="'+providerName+'">\n\
 				<p class="alt-img">'+providerName+'</p>\n\
@@ -360,6 +382,7 @@ function getProviderDiv(config){
 				'+getTransferP(config)+'\n\
 				<p> --------- </p>\n\
 				'+getPriceDiv(config)+'\n\
+				<p class="config-date">Date <b>'+date+'</b></p>\n\
 				<div class="addInfo" id='+id+'>\n\
 					<p>Continent <b>'+continent+'</b>\n\
 					<p>Os <b>'+os+'</b>\n\
@@ -372,7 +395,7 @@ function getProviderDiv(config){
 	}
 	else{ //Display line
 		var div = '\
-		<tr>\n\
+		<tr class="table-tr">\n\
 			<th scope="row">\n\
 				<a href="'+links[providerName]+'">\n\
 					<img src="'+img+'" alt="Provider image">\n\
@@ -385,7 +408,8 @@ function getProviderDiv(config){
 			<td>'+hdd+'</td>\n\
 			<td>'+transfer+'</td>\n\
 			<td>'+getPriceDiv(config)+'</td>\n\
-			<td>\n\
+			<td class="config-date">'+date+'</td>\n\
+			<td class="additional">\n\
 				<div style="overflow-y: scroll; height:90px">\n\
 					<p>Continent <b>'+continent+'</b>\n\
 					<p>Os <b>'+os+'</b>\n\
@@ -448,7 +472,6 @@ function sendQuery(){
 		data : $("#sparql-form").serialize(), // post data || get data
 		timeout: 10000, //milliseconds
 		success : function(result) {
-			console.log("sendQuery : SUCCESS")
 			configs = result.results.bindings;
 			queryOver = true;
 			successQuery(configs)
@@ -456,12 +479,12 @@ function sendQuery(){
 		},
 		error: function(xhr, resp, text) {
 			if(FusekiServerAdress != "http://localhost:3030"){
+				console.log(xhr, resp, text);
 				console.log("Distant server not found, switching to localhost");
 				FusekiServerAdress = "http://localhost:3030";
 				sendQuery();
 			}
 			else{
-			console.log("sendQuery : ERROR")
 				console.log(xhr, resp, text);
 				queryOver = true;
 				errorQuery();
@@ -479,13 +502,37 @@ function errorQuery(){
 	providersDiv.insertAdjacentHTML('beforeend', div);
 }
 
+/**
+Prerequesite : configs contains only one config for each provider
+Function : update the modal-date div by removing the old date and adding the new one.
+*/
+function updateDate(configs){
+	$('#modal-ul li').remove();
+	var liDiv='';
+	for(var i=0 ; i<configs.length ; i++){
+		var config = configs[i];
+		var li='<li>'+config.providername.value+' : '+config.date.value+'</li>';
+		liDiv+=li;
+	}
+	var ul = document.getElementById("modal-ul");
+	ul.insertAdjacentHTML('beforeend', liDiv);
+}
+
 function successQuery(configs){
+	resetCsvContent();
 	configs = getOptimizedConfigs(configs);
 	configs = sortConfigs(configs);
-	console.log(configs);
+	updateDate(configs);
 	var providersDiv = document.getElementById("green-part");
-	//$('#providers').html(''); //JQuery //Remove the old configurations
 	$('.config').remove();
+	$('.config boxState').remove();
+	if(isDisplayBoxs()){
+		for(var i=0 ; i<configs.length ; i++){
+			var config = configs[i];
+			var div = getProviderDiv(config, true);
+			providersDiv.insertAdjacentHTML('beforeend', div);
+		}
+	}
 	if(!isDisplayBoxs()){
 		var div = '<div id="table-configs" class="config">\
 						<table class="table">\
@@ -495,10 +542,11 @@ function successQuery(configs){
 							  <th>CPU</th>\
 							  <th>RAM</th>\
 							  <th>SSD</th>\
-							  <th>SSD</th>\
+							  <th>HDD</th>\
 							  <th>Transfer</th>\
 							  <th>Price</th>\
-							  <th>Additional</th>\
+							  <th class="config-date">Date</th>\
+							  <th class="additional">Additional</th>\
 							</tr>\
 						  </thead>\
 						  <tbody id="table-configs-tbody">\
@@ -507,11 +555,11 @@ function successQuery(configs){
 					</div>';
 		providersDiv.insertAdjacentHTML('beforeend', div);
 		providersDiv = document.getElementById("table-configs-tbody");
-	}
-	for(var i=0 ; i<configs.length ; i++){
-		var config = configs[i];
-		var div = getProviderDiv(config);
-		providersDiv.insertAdjacentHTML('beforeend', div);
+		for(var i=0 ; i<configs.length ; i++){
+			var config = configs[i];
+			var div = getProviderDiv(config, false);
+			providersDiv.insertAdjacentHTML('beforeend', div);
+		}
 	}
 }
 
@@ -552,3 +600,26 @@ function sortConfigs(configs){
 }
 
 /* ============================================================ */
+/**
+Taken on Xavier John's post : http://stackoverflow.com/questions/14964035/how-to-export-javascript-array-info-to-csv-on-client-side
+*/
+function exportToCsv() {
+	var filename = "data.csv";
+	var blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+	if (navigator.msSaveBlob) { // IE 10+
+		navigator.msSaveBlob(blob, filename);
+	} else {
+		var link = document.createElement("a");
+		if (link.download !== undefined) { // feature detection
+			// Browsers that support HTML5 download attribute
+			var url = URL.createObjectURL(blob);
+			link.setAttribute("href", url);
+			link.setAttribute("download", filename);
+			link.style.visibility = 'hidden';
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+		}
+	}
+	return false;
+}

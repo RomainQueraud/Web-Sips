@@ -18,12 +18,26 @@ img {
 	display: none;
 }
 
-h1 {
+.h1-div {
 	display: none;
 }
 
 .alt-img {
 	display: inline;
+}
+
+#title-div {
+	display : inline-block;
+}
+
+.img-div {
+	display : inline-block;
+}
+
+.logo {
+	display : inline-block;
+	width : 180px;
+	height : 100px;
 }
 
 .config {
@@ -36,7 +50,35 @@ h1 {
 	display : inline;
 }
 
+.boxState {
+	//display : inline;
+}
+
+.additional {
+	display: none;
+}
+
 .config p:before {
     content: "\00BB";
     margin-right: 6px;
+}
+
+#table-configs {
+	//display: none;
+}
+
+#modal-ul {
+	display: none;
+}
+
+.config-date{
+	display:block;
+}
+
+.modal{
+	display: block;
+}
+
+#modal-title, #modal-text, .modal-header, .modal-content, #about-modal{
+	display: inline;
 }

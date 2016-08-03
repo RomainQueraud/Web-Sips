@@ -2,7 +2,7 @@
 // Switchs : http://www.bootstrap-switch.org/
 
 var baseURI = "http://www.ic4.ie/SIPS/";
-var FusekiServerAdress = "http://romain.hopto.org:3030";
+var FusekiServerAdress = "http://sips.hopto.org:3030";
 
 var URI_windows = "http://dbpedia.org/page/Microsoft_Windows";
 var URI_linux = "http://dbpedia.org/page/Linux";
@@ -83,7 +83,7 @@ function onLoad(){
 	$("[name='currency-checkbox']").bootstrapSwitch('state', false);
 	$("[name='currency-checkbox']").on('switchChange.bootstrapSwitch', sendQuery);
 	$("[name='display-checkbox']").bootstrapSwitch('state', true);
-	$("[name='display-checkbox']").on('switchChange.bootstrapSwitch', sendQuery); 
+	$("[name='display-checkbox']").on('switchChange.bootstrapSwitch', sendQuery);
 	$("#continent-select").on('change', sendQuery); 
 	$("#billing-select").on('change', sendQuery); 
 	//$("#sparqlA").attr("href", FusekiServerAdress+"/control-panel.tpl");
@@ -108,6 +108,28 @@ function closeModalAbout(e){
 function closeModal(){
     $(".modal").attr("class", "modal");
 }
+
+/* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
+function openNav() {
+    document.getElementById("mySidenav").style.width = "100px";
+    document.getElementById("main").style.marginLeft = "100px";
+}
+
+/* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("main").style.marginLeft = "0";
+}
+
+$(document).scroll(function(){
+    if($(this).scrollTop() > 34)
+    {   
+        $('.sidenav').css({"top":"0px"});
+    }
+	else{
+		$('.sidenav').css({"top":"34px"});
+	}
+});
 
 function printReport(){
 	window.print();

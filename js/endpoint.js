@@ -1,4 +1,4 @@
-var FusekiServerAdress = "http://romain.hopto.org:3030";
+var FusekiServerAdress = "http://sips.hopto.org:3030";
 var ajaxTest = true;
 
 $(document).ready(function() {

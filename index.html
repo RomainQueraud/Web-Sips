@@ -23,153 +23,162 @@
 		  <li role="presentation"><a href="mailto:romain.queraud@etudiant.mines-nantes.fr">Contact</a></li>
 		</ul>
 		
-		<div id="aboutModal" class="modal">
-		  <div class="modal-content">
-			<div class="modal-header">
-				<span id="closeModal" class="close">x</span>
-				<h2 id="modal-title">About the Semantic IaaS Pricing Service</h2>
+		<div id="mega-div">
+			<div id="mySidenav" class="sidenav">
+			  <p>Bonjour</p>
+			  <p>AuRevoir</p>
 			</div>
-			<p id="modal-text">
-				Some independent sources provide an interface for comparing the prices and specifications of IaaS offerings across multiple cloud providers.<br/>
-				However, these services are intended for consumption by human operators. SIPS, the <b>Semantic IaaS Pricing Service</b>, provides an online catalogue of IaaS offerings that updates itself automatically and can be queried using semantic web technologies such as SPARQL. For example, the service would allow the following query, expressed as SPARQL, to be answered: "what virtual machine offerings are available on an hourly basis in Europe", and the result would indicate available offerings, pricing and terms of usage.<br/>
-				A microservice architecture is used where a proxy service is implemented for each available cloud provider. Web-crawlers with Selenium are also used. These are responsible for gathering up-to-date pricing and terms of service information using web scrapers. Semantic querying is implemented using the Jena open source semantic web framework.<br/>
-				A web-front end is provided that allows users to consume the service using their web browsers.
-			</p>
-			<p id="modal-date">
-				Date of the last update can be found in the date property of each provider.
-				<ul id="modal-ul">
-				</ul>
-			</p>
-		  </div>
-		</div>
-		
-        <form id="sparql-form" class="not-displayed" action="" method="GET" accept-charset="UTF-8">
-            <textarea name="query" cols="70" rows="10"></textarea>
-
-            <select name="output">
-			  <option value="json">JSON</option>
-              <option value="text">Text</option>
-              <option value="xml">XML</option>
-              <option value="csv">CSV</option>
-              <option value="tsv">TSV</option>
-            </select>
-            <select name="stylesheet">
-              <option value=""></option>
-              <option value="/xml-to-html.xsl">xml-to-html</option>
-              <option value="/xml-to-html-links.xsl">xml-to-html-links</option>
-              <option value="/xml-to-html-plain.xsl">xml-to-html-plain</option>
-            </select>
-            <input name="force-accept" value="text/plain" type="checkbox">
-    	    <input value="Get Results" type="submit">
-        </form>
-		
-		<div id="title-div">
-			<div class="img-div"><a href="http://www.ic4.ie/"><img class="logo" src="img/IC4.png"></a></div>
-			<div class="h1-div"><h1>Semantic IaaS Pricing Service</h1></div>
-			<div class="img-div"><a href="http://www.rendicity.com/"><img class="logo" src="img/Rendicity.png"></a></div>
-		</div>
-		
-		<div id="green-part">
-			<div id="sliders">
-				<div class="slider">
-					<input
-						type="text"
-						name="cpuSlider"
-						data-provide="slider"
-						data-slider-min="0"
-						data-slider-max="20"
-						data-slider-step="1"
-						data-slider-value="0"
-						data-slider-tooltip="always"
-						data-slider-orientation="vertical"
-						data-slider-reversed="true"
-					>
-					<p>Cpu</P>
-				</div>
-				<div class="slider">
-					<input
-						type="text"
-						name="ramSlider"
-						data-provide="slider"
-						data-slider-min="0"
-						data-slider-max="64"
-						data-slider-step="1"
-						data-slider-value="0"
-						data-slider-tooltip="always"
-						data-slider-orientation="vertical"
-						data-slider-reversed="true"
-					>
-					<p>Ram</p>
-				</div>
-				<div class="slider">
-					<input
-						type="text"
-						name="diskSlider"
-						data-provide="slider"
-						data-slider-min="0"
-						data-slider-max="1000"
-						data-slider-step="10"
-						data-slider-value="0"
-						data-slider-tooltip="always"
-						data-slider-orientation="vertical"
-						data-slider-reversed="true"
-					>
-					<p>Disk</p>
-				</div>
-				<div class="slider">
-					<input
-						type="text"
-						name="transferSlider"
-						data-provide="slider"
-						data-slider-min="0"
-						data-slider-max="15"
-						data-slider-step="1"
-						data-slider-value="0"
-						data-slider-tooltip="always"
-						data-slider-orientation="vertical"
-						data-slider-reversed="true"
-					>
-					<p>Transfer</p>
+			<!--<span onclick="openNav()">open</span>--> <!-- Uncomment to see left panel activation button -->
+			
+			<div id="main">
+				<div id="aboutModal" class="modal">
+				  <div class="modal-content">
+					<div class="modal-header">
+						<span id="closeModal" class="close">x</span>
+						<h2 id="modal-title">About the Semantic IaaS Pricing Service</h2>
+					</div>
+					<p id="modal-text">
+						Some independent sources provide an interface for comparing the prices and specifications of IaaS offerings across multiple cloud providers.<br/>
+						However, these services are intended for consumption by human operators. SIPS, the <b>Semantic IaaS Pricing Service</b>, provides an online catalogue of IaaS offerings that updates itself automatically and can be queried using semantic web technologies such as SPARQL. For example, the service would allow the following query, expressed as SPARQL, to be answered: "what virtual machine offerings are available on an hourly basis in Europe", and the result would indicate available offerings, pricing and terms of usage.<br/>
+						A microservice architecture is used where a proxy service is implemented for each available cloud provider. Web-crawlers with Selenium are also used. These are responsible for gathering up-to-date pricing and terms of service information using web scrapers. Semantic querying is implemented using the Jena open source semantic web framework.<br/>
+						A web-front end is provided that allows users to consume the service using their web browsers.
+					</p>
+					<p id="modal-date">
+						Date of the last update can be found in the date property of each provider.
+						<ul id="modal-ul">
+						</ul>
+					</p>
+				  </div>
 				</div>
 				
-				<div class="vertical">
-					<img id="loading-image" src="img/ajax-loader.gif" alt="Reloading" height="40" width="40" style="visibility : hidden;"> 
-					<br />
-					<div class="form-group">
-						<select class="form-control" id="continent-select">
-							<option>Any location</option>
-							<option>Africa</option>
-							<option>Australia</option>
-							<option>Asia</option>
-							<option>Europe</option>
-							<option>North America</option>
-							<option>South America</option>
-						</select>
+				<form id="sparql-form" class="not-displayed" action="" method="GET" accept-charset="UTF-8">
+					<textarea name="query" cols="70" rows="10"></textarea>
+
+					<select name="output">
+					  <option value="json">JSON</option>
+					  <option value="text">Text</option>
+					  <option value="xml">XML</option>
+					  <option value="csv">CSV</option>
+					  <option value="tsv">TSV</option>
+					</select>
+					<select name="stylesheet">
+					  <option value=""></option>
+					  <option value="/xml-to-html.xsl">xml-to-html</option>
+					  <option value="/xml-to-html-links.xsl">xml-to-html-links</option>
+					  <option value="/xml-to-html-plain.xsl">xml-to-html-plain</option>
+					</select>
+					<input name="force-accept" value="text/plain" type="checkbox">
+					<input value="Get Results" type="submit">
+				</form>
+				
+				<div id="title-div">
+					<div class="img-div"><a href="http://www.ic4.ie/"><img class="logo" src="img/IC4.png"></a></div>
+					<div class="h1-div"><h1>Semantic IaaS Pricing Service</h1></div>
+					<div class="img-div"><a href="http://www.rendicity.com/"><img class="logo" src="img/Rendicity.png"></a></div>
+				</div>
+				
+				<div id="green-part">
+					<div id="sliders">
+						<div class="slider">
+							<input
+								type="text"
+								name="cpuSlider"
+								data-provide="slider"
+								data-slider-min="0"
+								data-slider-max="20"
+								data-slider-step="1"
+								data-slider-value="0"
+								data-slider-tooltip="always"
+								data-slider-orientation="vertical"
+								data-slider-reversed="true"
+							>
+							<p>Cpu</P>
+						</div>
+						<div class="slider">
+							<input
+								type="text"
+								name="ramSlider"
+								data-provide="slider"
+								data-slider-min="0"
+								data-slider-max="64"
+								data-slider-step="1"
+								data-slider-value="0"
+								data-slider-tooltip="always"
+								data-slider-orientation="vertical"
+								data-slider-reversed="true"
+							>
+							<p>Ram</p>
+						</div>
+						<div class="slider">
+							<input
+								type="text"
+								name="diskSlider"
+								data-provide="slider"
+								data-slider-min="0"
+								data-slider-max="1000"
+								data-slider-step="10"
+								data-slider-value="0"
+								data-slider-tooltip="always"
+								data-slider-orientation="vertical"
+								data-slider-reversed="true"
+							>
+							<p>Disk</p>
+						</div>
+						<div class="slider">
+							<input
+								type="text"
+								name="transferSlider"
+								data-provide="slider"
+								data-slider-min="0"
+								data-slider-max="15"
+								data-slider-step="1"
+								data-slider-value="0"
+								data-slider-tooltip="always"
+								data-slider-orientation="vertical"
+								data-slider-reversed="true"
+							>
+							<p>Transfer</p>
+						</div>
+						
+						<div class="vertical">
+							<img id="loading-image" src="img/ajax-loader.gif" alt="Reloading" height="40" width="40" style="visibility : hidden;"> 
+							<br />
+							<div class="form-group">
+								<select class="form-control" id="continent-select">
+									<option>Any location</option>
+									<option>Africa</option>
+									<option>Australia</option>
+									<option>Asia</option>
+									<option>Europe</option>
+									<option>North America</option>
+									<option>South America</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<select class="form-control" id="billing-select">
+									<option>Billing year</option>
+									<option>Billing month</option>
+									<option>Billing day</option>
+									<option>Billing hour</option>
+									<option>Billing minute</option>
+									<option>Billing second</option>
+								</select>
+							</div>
+							<input type="checkbox" name="os-checkbox" data-off-text="Linux" data-on-text="Windows" checked>
+							<input type="checkbox" name="currency-checkbox" data-off-text="&euro;" data-on-text="$" checked>
+							<input type="checkbox" name="display-checkbox" data-off-text="&#9776;" data-on-text="&#9783;" checked>
+							<p id="print-div">
+								<a id="print-btn" href="#" class="btn btn-success btn-lg">
+									<span class="glyphicon glyphicon-print"></span> Print
+								</a>
+								<a id="csv-btn" href="#" class="btn btn-success btn-lg">
+									<span class="glyphicon glyphicon-print"></span> CSV
+								</a>
+							</p>
+						</div>
 					</div>
-					<div class="form-group">
-						<select class="form-control" id="billing-select">
-							<option>Billing year</option>
-							<option>Billing month</option>
-							<option>Billing day</option>
-							<option>Billing hour</option>
-							<option>Billing minute</option>
-							<option>Billing second</option>
-						</select>
-					</div>
-					<input type="checkbox" name="os-checkbox" data-off-text="Linux" data-on-text="Windows" checked>
-					<input type="checkbox" name="currency-checkbox" data-off-text="&euro;" data-on-text="$" checked>
-					<input type="checkbox" name="display-checkbox" data-off-text="&#9776;" data-on-text="&#9783;" checked>
-					<p id="print-div">
-						<a id="print-btn" href="#" class="btn btn-success btn-lg">
-							<span class="glyphicon glyphicon-print"></span> Print
-						</a>
-						<a id="csv-btn" href="#" class="btn btn-success btn-lg">
-							<span class="glyphicon glyphicon-print"></span> CSV
-						</a>
-					</p>
 				</div>
 			</div>
 		</div>
-		
     </body>
 </html>

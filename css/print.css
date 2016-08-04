@@ -67,6 +67,10 @@ img {
 	//display: none;
 }
 
+#mySidenav {
+	display: none;
+}
+
 #modal-ul {
 	display: none;
 }

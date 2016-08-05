@@ -8,6 +8,7 @@ var URI_windows = "http://dbpedia.org/page/Microsoft_Windows";
 var URI_linux = "http://dbpedia.org/page/Linux";
 
 var csvContent;
+var navOpened = false;
 
 var links = {
 	CloudWare : "https://client.cloudware.bg/index.php?/cart/-lang-c_cloudservers-/&step=0&languagechange=English",
@@ -71,9 +72,11 @@ function onLoad(){
 	}
 	$("#print-btn").on('click', printReport);
 	$("#csv-btn").on('click', exportToCsv);
+	$("#more-btn").on('click', openNav);
 	$("#closeModal").on('click', closeModal);
 	$("#buttonModal").on('click', openModal);
 	$("#aboutModal").on('click', closeModalAbout);
+	$(".additional-checkbox").on('click', sendQuery);
 	$('[name=cpuSlider]').slider().on('slideStop', sendQuery);
 	$('[name=ramSlider]').slider().on('slideStop', sendQuery);
 	$('[name=diskSlider]').slider().on('slideStop', sendQuery);
@@ -88,6 +91,8 @@ function onLoad(){
 	$("#billing-select").on('change', sendQuery); 
 	//$("#sparqlA").attr("href", FusekiServerAdress+"/control-panel.tpl");
 	$("#sparql-form").attr("action", FusekiServerAdress+"/ds/query");
+	$("[name='freeTrial-checkbox']").bootstrapSwitch('state', false);
+	$("[name='phoneSupport-checkbox']").bootstrapSwitch('state', false);
 	sendQuery();
 }
 
@@ -111,8 +116,17 @@ function closeModal(){
 
 /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
 function openNav() {
-    document.getElementById("mySidenav").style.width = "100px";
-    document.getElementById("main").style.marginLeft = "100px";
+	if(!navOpened){
+		navOpened = true;
+		document.getElementById("mySidenav").style.width = "10%";
+		document.getElementById("main").style.width = "90%";
+	}
+	else{
+		navOpened = false;
+		document.getElementById("mySidenav").style.width = "0%";
+		document.getElementById("main").style.width = "100%";
+	}
+	return false;
 }
 
 /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
@@ -121,15 +135,19 @@ function closeNav() {
     document.getElementById("main").style.marginLeft = "0";
 }
 
+/*
 $(document).scroll(function(){
-    if($(this).scrollTop() > 34)
+    if($(this).scrollTop() > 100)
     {   
         $('.sidenav').css({"top":"0px"});
+		$('.sidenav').css({"margin-top":"0px"});
     }
 	else{
-		$('.sidenav').css({"top":"34px"});
+		$('.sidenav').css({"top":""});
+		$('.sidenav').css({"margin-top":"0px"});
 	}
 });
+*/
 
 function printReport(){
 	window.print();
@@ -227,11 +245,66 @@ function isDisplayBoxs(){
 	}
 }
 
+function getAdditionalQueryPart(){
+	var query = "";
+	if($('#freeTrial:checked').val()=="t") { query+="?providerUri <"+baseURI+"freeTrial> ?freeTrial .\n" }
+	if($('#phoneSupport:checked').val()=="t") { query+="?providerUri <"+baseURI+"phoneSupport> ?phoneSupport .\n" }
+	if($('#multipleIp:checked').val()=="t") { query+="?providerUri <"+baseURI+"multipleIp> ?multipleIp .\n" }
+	if($('#webAccess:checked').val()=="t") { query+="?providerUri <"+baseURI+"webAccess> ?webAccess .\n" }
+	if($('#burstResource:checked').val()=="t") { query+="?providerUri <"+baseURI+"burstResource> ?burstResource .\n" }
+	if($('#customizableCpu:checked').val()=="t") { query+="?providerUri <"+baseURI+"customizableCpu> ?customizableCpu .\n" }
+	if($('#api:checked').val()=="t") { query+="?providerUri <"+baseURI+"api> ?api .\n" }
+	if($('#customizableConfiguration:checked').val()=="t") { query+="?providerUri <"+baseURI+"customizableConfiguration> ?customizableConfiguration .\n" }
+	if($('#backup:checked').val()=="t") { query+="?providerUri <"+baseURI+"backup> ?backup .\n" }
+	if($('#payAsYouGo:checked').val()=="t") { query+="?providerUri <"+baseURI+"payAsYouGo> ?payAsYouGo .\n" }
+	if($('#prepaid:checked').val()=="t") { query+="?providerUri <"+baseURI+"prepaid> ?prepaid .\n" }
+	if($('#multipleUsers:checked').val()=="t") { query+="?providerUri <"+baseURI+"multipleUsers\> ?multipleUsers .\n" }
+	if($('#detailledSecurity:checked').val()=="t") { query+="?providerUri <"+baseURI+"detailledSecurity> ?detailledSecurity .\n" }
+	if($('#terminalAccess:checked').val()=="t") { query+="?providerUri <"+baseURI+"terminalAccess> ?terminalAccess .\n" }
+	if($('#uptimeGuarantee:checked').val()=="t") { query+="?providerUri <"+baseURI+"uptimeGuarantee> ?uptimeGuarantee .\n" }
+	if($('#dedicatedServer:checked').val()=="t") { query+="?providerUri <"+baseURI+"dedicatedServer> ?dedicatedServer .\n" }
+	if($('#paypal:checked').val()=="t") { query+="?providerUri <"+baseURI+"paypal> ?paypal .\n" }
+	if($('#alwaysSupport:checked').val()=="t") { query+="?providerUri <"+baseURI+"alwaysSupport> ?alwaysSupport .\n" }
+	if($('#environment:checked').val()=="t") { query+="?providerUri <"+baseURI+"environment> ?environment .\n" }
+	return query;
+}
+
+/**
+For all the conditional information ticked on the left panel, check if the corresponding property exist for the config.
+Return true if the config pass the test, false on the other case.
+*/
+function isOkForAdditional(config){
+	if($('#freeTrial:checked').val()=="t" && config.freeTrial.value=="") { return false; }
+	if($('#phoneSupport:checked').val()=="t" && config.phoneSupport.value=="") { return false; }
+	if($('#multipleIp:checked').val()=="t" && config.multipleIp.value=="") { return false; }
+	if($('#webAccess:checked').val()=="t" && config.webAccess.value=="") { return false; }
+	if($('#burstResource:checked').val()=="t" && config.burstResource.value=="") { return false; }
+	if($('#customizableCpu:checked').val()=="t" && config.customizableCpu.value=="") { return false; }
+	if($('#api:checked').val()=="t" && config.api.value=="") { return false; }
+	if($('#customizableConfiguration:checked').val()=="t" && config.customizableConfiguration.value=="") { return false; }
+	if($('#backup:checked').val()=="t" && config.backup.value=="") { return false; }
+	if($('#payAsYouGo:checked').val()=="t" && config.payAsYouGo.value=="") { return false; }
+	if($('#prepaid:checked').val()=="t" && config.prepaid.value=="") { return false; }
+	if($('#multipleUsers:checked').val()=="t" && config.multipleUsers.value=="") { return false; }
+	if($('#detailledSecurity:checked').val()=="t" && config.detailledSecurity.value=="") { return false; }
+	if($('#terminalAccess:checked').val()=="t" && config.terminalAccess.value=="") { return false; }
+	if($('#uptimeGuarantee:checked').val()=="t" && config.uptimeGuarantee.value=="") { return false; }
+	if($('#dedicatedServer:checked').val()=="t" && config.dedicatedServer.value=="") { return false; }
+	if($('#paypal:checked').val()=="t" && config.paypal.value=="") { return false; }
+	if($('#alwaysSupport:checked').val()=="t" && config.alwaysSupport.value=="") { return false; }
+	if($('#environment:checked').val()=="t" && config.environment.value=="") { return false; }
+	//console.log($('#environment:checked').val());
+	return true;
+}
+
 /* Return the complete Query String */
 function getSparqlQuery(){
 	var sparqlQuery = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\
-Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?hdd ?transfer ?continent ?os ?priceEuro ?price ?providername ?comment ?billing ?billingDuration ?date\n\
+Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?hdd ?transfer ?continent ?os ?priceEuro ?price ?providername ?comment ?billing ?billingDuration ?date\
+ ?freeTrial ?phoneSupport ?multipleIp ?webAccess ?burstResource ?customizableCpu ?api ?customizableConfiguration ?backup ?payAsYouGo ?prepaid ?multipleUsers\
+ ?detailledSecurity ?terminalAccess ?uptimeGuarantee ?dedicatedServer ?paypal ?alwaysSupport ?environment\n\
 Where{\n\
+	"+getAdditionalQueryPart()+"\
 	?configUri <"+baseURI+"hdd> ?hdd .\n\
 	?configUri <"+baseURI+"cpu> ?cpu .\n\
 	?configUri <"+baseURI+"price> ?price .\n\
@@ -543,6 +616,7 @@ function updateDate(configs){
 function successQuery(configs){
 	resetCsvContent();
 	configs = getOptimizedConfigs(configs);
+	configs = filterAdditionalConfigs(configs);
 	configs = sortConfigs(configs);
 	updateDate(configs);
 	var providersDiv = document.getElementById("green-part");
@@ -605,6 +679,19 @@ function getOptimizedConfigs(configs){
 		}
 	}
 	newConfigs = newConfigs.sort();
+	return newConfigs;
+}
+
+/**
+Return a new config list of all the configs that passed the additional properties test
+*/
+function filterAdditionalConfigs(configs){
+	var newConfigs = [];
+	for(var i=0 ; i<configs.length ; i++){
+		if(isOkForAdditional(configs[i])){
+			newConfigs.push(configs[i]);
+		}
+	}
 	return newConfigs;
 }
 

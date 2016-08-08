@@ -29,10 +29,12 @@ function closeModalAbout(e){
 	if(!$(e.target).is("#modal-text") && !$(e.target).is("#modal-title")){
 		closeModal();
 	}
+	return false;
 }
 
 function closeModal(){
     $(".modal").css("display", "none");
+	return false;
 }
 
 function doSubmit(){

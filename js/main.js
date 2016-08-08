@@ -10,6 +10,8 @@ var URI_linux = "http://dbpedia.org/page/Linux";
 var csvContent;
 var navOpened = false;
 
+var configsMinimal;
+
 var links = {
 	CloudWare : "https://client.cloudware.bg/index.php?/cart/-lang-c_cloudservers-/&step=0&languagechange=English",
 	Atlantic : "https://www.atlantic.net/cloud-hosting/pricing/",
@@ -64,36 +66,6 @@ var URI = {
 	minuteDuration : ((1/30.416)/24)/60,
 	second : "http://dbpedia.org/page/Second",
 	secondDuration : (((1/30.416)/24)/60)/60,
-}
-
-function onLoad(){
-	if(window.location.href.includes("github")){
-		window.location.href = "http://ic4-sips.s3-website-eu-west-1.amazonaws.com/";
-	}
-	$("#print-btn").on('click', printReport);
-	$("#csv-btn").on('click', exportToCsv);
-	$("#more-btn").on('click', openNav);
-	$("#closeModal").on('click', closeModal);
-	$("#buttonModal").on('click', openModal);
-	$("#aboutModal").on('click', closeModalAbout);
-	$(".additional-checkbox").on('click', sendQuery);
-	$('[name=cpuSlider]').slider().on('slideStop', sendQuery);
-	$('[name=ramSlider]').slider().on('slideStop', sendQuery);
-	$('[name=diskSlider]').slider().on('slideStop', sendQuery);
-	$('[name=transferSlider]').slider().on('slideStop', sendQuery);
-	$("[name='os-checkbox']").bootstrapSwitch('state', false);
-	$("[name='os-checkbox']").on('switchChange.bootstrapSwitch', sendQuery); 
-	$("[name='currency-checkbox']").bootstrapSwitch('state', false);
-	$("[name='currency-checkbox']").on('switchChange.bootstrapSwitch', sendQuery);
-	$("[name='display-checkbox']").bootstrapSwitch('state', true);
-	$("[name='display-checkbox']").on('switchChange.bootstrapSwitch', sendQuery);
-	$("#continent-select").on('change', sendQuery); 
-	$("#billing-select").on('change', sendQuery); 
-	//$("#sparqlA").attr("href", FusekiServerAdress+"/control-panel.tpl");
-	$("#sparql-form").attr("action", FusekiServerAdress+"/ds/query");
-	$("[name='freeTrial-checkbox']").bootstrapSwitch('state', false);
-	$("[name='phoneSupport-checkbox']").bootstrapSwitch('state', false);
-	sendQuery();
 }
 
 /* ============================================================ */
@@ -295,6 +267,33 @@ function isOkForAdditional(config){
 	if($('#environment:checked').val()=="t" && config.environment.value=="") { return false; }
 	//console.log($('#environment:checked').val());
 	return true;
+}
+
+function getSparqlQueryMinimal(){
+	var sparqlQuery = "PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>\n\
+Select ?providerUri ?configUri ?id ?cpu ?ram ?disk ?hdd ?transfer ?continent ?os ?priceEuro ?price ?providername ?comment ?billing ?billingDuration ?date\
+ ?freeTrial ?phoneSupport ?multipleIp ?webAccess ?burstResource ?customizableCpu ?api ?customizableConfiguration ?backup ?payAsYouGo ?prepaid ?multipleUsers\
+ ?detailledSecurity ?terminalAccess ?uptimeGuarantee ?dedicatedServer ?paypal ?alwaysSupport ?environment\n\
+Where{\n\
+	?configUri <"+baseURI+"hdd> ?hdd .\n\
+	?configUri <"+baseURI+"cpu> ?cpu .\n\
+	?configUri <"+baseURI+"price> ?price .\n\
+	?configUri <"+baseURI+"providerName> ?providername .\n\
+	?configUri <"+baseURI+"ram> ?ram .\n\
+	?configUri <"+baseURI+"ssd> ?disk .\n\
+	?configUri <"+baseURI+"transferSpeed> ?transfer .\n\
+	?configUri <"+baseURI+"comment> ?comment .\n\
+	?configUri <"+baseURI+"id> ?id .\n\
+	?configUri <"+baseURI+"os> ?os .\n\
+	?providerUri <"+baseURI+"continent> ?continent .\n\
+	?providerUri <"+baseURI+"date> ?date .\n\
+	?providerUri <"+baseURI+"config> ?configUri .\n\
+	?providerUri <"+baseURI+"billingDuration> ?billingDuration.\n\
+	?providerUri <"+baseURI+"billing> ?billing .\n\
+	?configUri <"+baseURI+"priceEuro> ?priceEuro\n\
+}\n\
+";
+	return sparqlQuery;
 }
 
 /* Return the complete Query String */
@@ -555,21 +554,33 @@ function fillTextArea(){
 }
 
 /* Send the Query to the server and return the list of configurations as a result */
-function sendQuery(){
+function sendQuery(minimal){
+	var out = 10000;
 	var configs;
 	$("#loading-image").css("visibility", "visible"); 
-	fillTextArea();
+	if(minimal){
+		out=20000;
+		$('[name=query]').val(getSparqlQueryMinimal());
+	}
+	else{
+		fillTextArea();
+	}
 	$.ajax({
 		async: true,
 		url: FusekiServerAdress+"/ds/query", // url where to submit the request
 		type : "GET", // type of action POST || GET
 		dataType : 'json', // data type
 		data : $("#sparql-form").serialize(), // post data || get data
-		timeout: 10000, //milliseconds
+		timeout: out, //milliseconds
 		success : function(result) {
 			configs = result.results.bindings;
 			queryOver = true;
-			successQuery(configs)
+			if(!minimal){
+				successQuery(configs)
+			}
+			else{
+				successQueryMinimal(configs);
+			}
 			$("#loading-image").css("visibility", "hidden"); 
 		},
 		error: function(xhr, resp, text) {
@@ -577,7 +588,7 @@ function sendQuery(){
 				console.log(xhr, resp, text);
 				console.log("Distant server not found, switching to localhost");
 				FusekiServerAdress = "http://localhost:3030";
-				sendQuery();
+				sendQuery(minimal);
 			}
 			else{
 				console.log(xhr, resp, text);

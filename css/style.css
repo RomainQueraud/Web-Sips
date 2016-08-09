@@ -105,7 +105,6 @@ div .vertical img, div .vertical input{
 	display : inline-block;
 	text-align : center;
 	background : #339966;
-	padding : 5px;
 	//border-radius: 50px;
 	width:100%;
 }
@@ -191,6 +190,13 @@ div .vertical img, div .vertical input{
 
 #print-div a {
 	margin : 10px;
+}
+
+.graphics {
+	padding : 0px;
+	margin : 0px;
+	margin-top : 15px;
+	margin-bottom : 15px;
 }
 
 /**************** Modal ***************/

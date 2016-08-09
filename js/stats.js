@@ -3,6 +3,8 @@ function onLoad(){
 }
 
 function successQueryMinimal(configs){
+	$("#loading-image").css("display", "none");
+	$("#green-part").css("display", "inline-block");
 	fillChart(configs);
 }
 
@@ -18,22 +20,31 @@ function getBigConfigs(configs){
 		var config = configs[i];
 		if(!providerOrder.includes(config.providername.value)){
 			providerOrder.push(config.providername.value);
-			bigConfigs.push(config);
+			bigConfigs.push([]);
 		}
 		var j = providerOrder.indexOf(config.providername.value);
-		if(parseFloat(config.price.value) > parseFloat(bigConfigs[j].price.value)){
-			bigConfigs[j] = config;
-		}
+		bigConfigs[j].push(config);
 	}
 	var datasets = [];
 	for(var i=0 ; i<bigConfigs.length ; i++){
-		var config = bigConfigs[i];
+		var configList = bigConfigs[i];
 		var triplet = [Math.floor(Math.random()*255), Math.floor(Math.random()*255), Math.floor(Math.random()*255)];
+		var data = [];
+		for(var j=0 ; j<configList.length ; j++){
+			var config = configList[j];
+			data.push({x:config.cpu.value, y:config.ram.value, r:config.price.value/100});
+		}
+		var hidden = true;
+		if(configList[0].providername.value=="Linode" || configList[0].providername.value=="CloudSigma"){
+			hidden = false;
+		}
 		var elem = {
 			label : config.providername.value,
+			hidden: hidden,
 			backgroundColor: "rgba("+triplet[0]+","+triplet[1]+","+triplet[2]+",0.2)",
             borderColor: "rgba("+triplet[0]+","+triplet[1]+","+triplet[2]+",1)",
-            data: [{x:config.cpu.value, y:config.ram.value, r:config.price.value}]
+			hoverRadius: 0.5,
+            data: data
 		};
 		datasets.push(elem);
 	}
@@ -50,6 +61,7 @@ function bigConfigsChart(configs){
 			datasets: result
 		},
 		options: {
+			maintainAspectRatio:false
 		}
 	});
 }

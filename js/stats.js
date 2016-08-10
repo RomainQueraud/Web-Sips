@@ -1,16 +1,27 @@
 function onLoad(){
+	myOnLoad();
 	sendQuery(true);
 }
 
 function successQueryMinimal(configs){
+	console.log("a number : "+"az".charCodeAt(0));
+	console.log("z number : "+"az".charCodeAt(1));
 	$("#loading-image").css("display", "none");
 	$("#green-part").css("display", "inline-block");
+	$("#bigConfigsChart").attr("width",$("#bigConfigsChart").parent().offsetWidth);
 	fillChart(configs);
 }
 
 function fillChart(configs){
 	nbConfigsChart(configs);
 	bigConfigsChart(configs);
+	/*
+	$('.config').resizable({
+		handles: 'n,w,s,e',
+		minWidth: 200,
+		maxWidth: 400
+	});
+	*/
 }
 
 function getBigConfigs(configs){
@@ -39,10 +50,10 @@ function getBigConfigs(configs){
 			hidden = false;
 		}
 		var elem = {
-			label : config.providername.value,
+			label : configList[0].providername.value,
 			hidden: hidden,
-			backgroundColor: "rgba("+triplet[0]+","+triplet[1]+","+triplet[2]+",0.2)",
-            borderColor: "rgba("+triplet[0]+","+triplet[1]+","+triplet[2]+",1)",
+			backgroundColor: getColorLine(configList[0].providername.value, 0.2),
+            borderColor: getColorLine(configList[0].providername.value, 1),
 			hoverRadius: 0.5,
             data: data
 		};
@@ -61,6 +72,25 @@ function bigConfigsChart(configs){
 			datasets: result
 		},
 		options: {
+			title: {
+				display: true,
+				text: 'Repartition of configurations per providers'
+			},
+			scales: {
+				xAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'CPU'
+					}
+				}],
+				yAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'RAM'
+					}
+				}]
+			},	
+			responsive: true,
 			maintainAspectRatio:false
 		}
 	});
@@ -80,8 +110,8 @@ function getNbConfigs(configs){
 			var triplet = [Math.floor(Math.random()*255), Math.floor(Math.random()*255), Math.floor(Math.random()*255)];
 			labels.push(config.providername.value);
 			numbers.push(0);
-			colors.push('rgba('+triplet[0]+', '+triplet[1]+', '+triplet[2]+', 0.2)');
-			borders.push('rgba('+triplet[0]+', '+triplet[1]+', '+triplet[2]+', 1)');
+			colors.push(getColorLine(config.providername.value, 0.2));
+			borders.push(getColorLine(config.providername.value, 1));
 		}
 		var j = labels.indexOf(config.providername.value);
 		numbers[j] = numbers[j]+1;
@@ -106,6 +136,10 @@ function nbConfigsChart(configs){
 			}]
 		},
 		options: {
+			title: {
+				display: true,
+				text: 'Number of configurations per provider'
+			},
 			maintainAspectRatio:false,
 			scales: {
 				yAxes: [{
@@ -116,4 +150,17 @@ function nbConfigsChart(configs){
 			}
 		},
 	});
+}
+
+/**
+Return a color string to be used in the chartjs configuration.
+Alpha is the transparency.
+Color is based on the provider name. So it should be different for every providers, but always the same for one unique provider.
+*/
+function getColorLine(providername, alpha){
+	var lowerName = providername.toLowerCase();
+	var r = Math.floor(((lowerName.charCodeAt(0)-97)/(122-97))*255);
+	var g = Math.floor(((lowerName.charCodeAt((lowerName.length-1)/2)-97)/(122-97))*255);
+	var b = Math.floor(((lowerName.charCodeAt(lowerName.length-1)-97)/(122-97))*255);
+	return 'rgba('+r+', '+g+', '+b+', '+alpha+')';
 }

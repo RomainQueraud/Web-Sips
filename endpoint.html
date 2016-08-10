@@ -9,12 +9,15 @@
 	<body onload="onLoad()">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
+		<script src="js/main.js"></script>
 		<script src="js/endpoint.js"></script>
 		
 		<ul class="nav nav-pills">
 		  <li role="presentation"><a href="index.html">Pricing</a></li>
-		  <li role="presentation" class="active"><a id="sparqlA" href="#">SPARQL</a></li>
-		  <li role="presentation"><a id="buttonModal" href="#">About</a></li>
+		  <li role="presentation" class="active"><a id="sparqlA" href="">SPARQL</a></li>
+		  <li role="presentation"><a href="stats.html">Graphics</a></li>
+		  <li role="presentation"><a id="buttonModal" href="">About</a></li>
+		  <li role="presentation"><a id="buttonContactModal" href="">Contact</a></li>
 		</ul>
 		
 		<div id="aboutModal" class="modal">
@@ -32,9 +35,68 @@
 		  </div>
 		</div>
 		
+		<div id="contactModal" class="modal">
+		  <div class="modal-content">
+			<div class="modal-header">
+				<span id="closeContactModal" class="close">x</span>
+				<h2 id="modal-title">Contact us</h2>
+			</div>
+			<p id="modal-text">
+				<br/>
+				For enquiries about the project, please <a href="http://www.ic4.ie/contact">contact a member of the IC4</a>.<br/>
+				<br/>
+				If you are a provider and want to communicate your configurations, please direct an email to <a href="mailto:romain.queraud@etudiant.mines-nantes.fr">romain.queraud@etudiant.mines-nantes.fr</a>.<br/>
+				For each configurations, please provide information such as :
+				<ul>
+					<li>Provider Name (eg: CloudIC4)</li>
+					<li>Configuration Name (eg: Large - number 3)</li>
+					<li>Cpu Number (eg: 1)</li>
+					<li>Ram Capacity in GB (eg: 0.512 or 2)</li>
+					<li>Hdd Capacity in GB (eg: 40)</li>
+					<li>Ssd Capacity in GB (eg: 40)</li>
+					<li>Transfer Speed in TB (eg: 3)</li>
+					<li>Os (eg: Linux or Windows)</li>
+					<li>The currency you use (eg: Euro)</li>
+					<li>The country in which is hosted this configuration (eg: Ireland)</li>
+					<li>Additional comments you may have (eg: 10% discount on the first server)</li>
+					<li>The price in Dollar (eg: 11.36)</li>
+					<li>The date (eg: 10th August 2016)</li>
+					<li>This is a dedicated server (eg: true or false)</li>
+				</ul>
+				Please also provide general information about your service :
+				<ul>
+					<li>Provider Name</li>
+					<li>The currency you use</li>
+					<li>The number of configurations your have</li>
+					<li>The list of countries/continents in which you host the service</li>
+					<li>Your minimum billing period (minutes ? hour ? month ?)</li>
+					<li>Do you provide a free trial period ?</li>
+					<li>Do you have a phone support ?</li>
+					<li>Do you have a 24/7 support ?</li>
+					<li>Do you allow your users to have multiple IP addresses ?</li>
+					<li>Do you provide a web interface to manage your service</li>
+					<li>Do resources increase automatically if needed ?</li>
+					<li>Can the customer changes the CPU speed ?</li>
+					<li>Do you have an api ?</li>
+					<li>Do the customer can completely configure his configuration ? (Or are they already defined ?)</li>
+					<li>Do you do automatic backups of user datas ?</li>
+					<li>Do you provide a payAsYouGo system ?</li>
+					<li>Do you provide a prepaid system ?</li>
+					<li>Can multiple users access the same account ?</li>
+					<li>Do you provide details about your security policy ?</li>
+					<li>Is your service accessible via ssh ?</li>
+					<li>Do you provide a 100% uptime guarantee ?</li>
+					<li>Do you provide dedicated servers ?</li>
+					<li>Is it possible to pay via Paypal ?</li>
+					<li>Do you have a specific policy regarding environment ?</li>
+				</ul>
+			</p>
+		  </div>
+		</div>
+		
 		<div id="title-div">
 			<div class="img-div"><a href="http://www.ic4.ie/"><img class="logo" src="img/IC4.png"></a></div>
-			<div class="h1-div"><h1>Semantic IaaS Pricing Endpoint - SPARQL</h1></div>
+			<div class="h1-div"><h1>Semantic IaaS Pricing - Endpoint</h1></div>
 			<div class="img-div"><a href="http://www.rendicity.com/"><img class="logo" src="img/Rendicity.png"></a></div>
 		</div>
 		

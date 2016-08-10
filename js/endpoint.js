@@ -9,32 +9,13 @@ $(document).ready(function() {
 );    
 
 function onLoad(){
+	myOnLoad();
 	console.log("href : "+window.location.href );
 	if(window.location.href.includes("github")){
 		window.location.href = "http://ic4-sips.s3-website-eu-west-1.amazonaws.com/endpoint.html";
 	}
-	$("#closeModal").on('click', closeModal);
-	$("#buttonModal").on('click', openModal);
-	$("#aboutModal").on('click', closeModalAbout);
 	$("#sparql-form").attr("action", FusekiServerAdress+"/ds/query");
 	$(".form-based-height").css("height", $("#sparql-form").css("height"));
-}
-
-function openModal(){
-	$(".modal").css("display", "block");
-	return false;
-}
-
-function closeModalAbout(e){
-	if(!$(e.target).is("#modal-text") && !$(e.target).is("#modal-title")){
-		closeModal();
-	}
-	return false;
-}
-
-function closeModal(){
-    $(".modal").css("display", "none");
-	return false;
 }
 
 function doSubmit(){

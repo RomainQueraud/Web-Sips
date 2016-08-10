@@ -127,6 +127,7 @@ div .vertical img, div .vertical input{
 	display : inline-block;
 	color : black;
 	box-shadow: 1px 1px 2px black;
+	//resize: both;
 }
 
 .config .details {
@@ -222,6 +223,11 @@ div .vertical img, div .vertical input{
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 	margin-left: 0px;
+	text-align:left;
+}
+
+.modal h2 {
+	text-align: center;
 }
 
 .displayed {

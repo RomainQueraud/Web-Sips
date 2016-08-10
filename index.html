@@ -18,27 +18,95 @@
 		<script src="js/index.js"></script>
 		
 		<ul class="nav nav-pills">
-		  <li role="presentation" class="active"><a href="#">Pricing</a></li>
+		  <li role="presentation" class="active"><a href="">Pricing</a></li>
 		  <li role="presentation"><a id="sparqlA" href="endpoint.html">SPARQL</a></li>
-		  <li role="presentation"><a id="buttonModal" href="#">About</a></li>
-		  <li role="presentation"><a href="mailto:romain.queraud@etudiant.mines-nantes.fr">Contact</a></li>
+		  <li role="presentation"><a href="stats.html">Graphics</a></li>
+		  <li role="presentation"><a id="buttonModal" href="">About</a></li>
+		  <li role="presentation"><a id="buttonContactModal" href="">Contact</a></li>
 		</ul>
 					
 		<div id="aboutModal" class="modal">
 		  <div class="modal-content">
+			<!--
 			<div class="modal-header">
 				<span id="closeModal" class="close">x</span>
 				<h2 id="modal-title">About the Semantic IaaS Pricing Service</h2>
 			</div>
+			-->
+			<iframe width="100%" height="1000"src="https://docs.google.com/document/d/1WlmQeKL3xKYci2DQszTRry3LFScDZsnTF67cheotWLk/pub?embedded=true"></iframe>
+			<!--
 			<p id="modal-text">
+				<br/>
 				Some independent sources provide an interface for comparing the prices and specifications of IaaS offerings across multiple cloud providers.<br/>
 				However, these services are intended for consumption by human operators. SIPS, the <b>Semantic IaaS Pricing Service</b>, provides an online catalogue of IaaS offerings that updates itself automatically and can be queried using semantic web technologies such as SPARQL. For example, the service would allow the following query, expressed as SPARQL, to be answered: "what virtual machine offerings are available on an hourly basis in Europe", and the result would indicate available offerings, pricing and terms of usage.<br/>
 				A microservice architecture is used where a proxy service is implemented for each available cloud provider. Web-crawlers with Selenium are also used. These are responsible for gathering up-to-date pricing and terms of service information using web scrapers. Semantic querying is implemented using the Jena open source semantic web framework.<br/>
 				A web-front end is provided that allows users to consume the service using their web browsers.
 			</p>
+			-->
+			<!--
 			<p id="modal-date">
 				Date of the last update can be found in the date property of each provider.
 				<ul id="modal-ul">
+				</ul>
+			</p>
+			-->
+		  </div>
+		</div>
+		
+		<div id="contactModal" class="modal">
+		  <div class="modal-content">
+			<div class="modal-header">
+				<span id="closeContactModal" class="close">x</span>
+				<h2 id="modal-title">Contact us</h2>
+			</div>
+			<p id="modal-text">
+				<br/>
+				For enquiries about the project, please <a href="http://www.ic4.ie/contact">contact a member of the IC4</a>.<br/>
+				<br/>
+				If you are a provider and want to communicate your configurations, please direct an email to <a href="mailto:romain.queraud@etudiant.mines-nantes.fr">romain.queraud@etudiant.mines-nantes.fr</a>.<br/>
+				For each configurations, please provide information such as :
+				<ul>
+					<li>Provider Name (eg: CloudIC4)</li>
+					<li>Configuration Name (eg: Large - number 3)</li>
+					<li>Cpu Number (eg: 1)</li>
+					<li>Ram Capacity in GB (eg: 0.512 or 2)</li>
+					<li>Hdd Capacity in GB (eg: 40)</li>
+					<li>Ssd Capacity in GB (eg: 40)</li>
+					<li>Transfer Speed in TB (eg: 3)</li>
+					<li>Os (eg: Linux or Windows)</li>
+					<li>The currency you use (eg: Euro)</li>
+					<li>The country in which is hosted this configuration (eg: Ireland)</li>
+					<li>Additional comments you may have (eg: 10% discount on the first server)</li>
+					<li>The price in Dollar (eg: 11.36)</li>
+					<li>The date (eg: 10th August 2016)</li>
+					<li>This is a dedicated server (eg: true or false)</li>
+				</ul>
+				Please also provide general information about your service :
+				<ul>
+					<li>Provider Name</li>
+					<li>The currency you use</li>
+					<li>The number of configurations your have</li>
+					<li>The list of countries/continents in which you host the service</li>
+					<li>Your minimum billing period (minutes ? hour ? month ?)</li>
+					<li>Do you provide a free trial period ?</li>
+					<li>Do you have a phone support ?</li>
+					<li>Do you have a 24/7 support ?</li>
+					<li>Do you allow your users to have multiple IP addresses ?</li>
+					<li>Do you provide a web interface to manage your service</li>
+					<li>Do resources increase automatically if needed ?</li>
+					<li>Can the customer changes the CPU speed ?</li>
+					<li>Do you have an api ?</li>
+					<li>Do the customer can completely configure his configuration ? (Or are they already defined ?)</li>
+					<li>Do you do automatic backups of user datas ?</li>
+					<li>Do you provide a payAsYouGo system ?</li>
+					<li>Do you provide a prepaid system ?</li>
+					<li>Can multiple users access the same account ?</li>
+					<li>Do you provide details about your security policy ?</li>
+					<li>Is your service accessible via ssh ?</li>
+					<li>Do you provide a 100% uptime guarantee ?</li>
+					<li>Do you provide dedicated servers ?</li>
+					<li>Is it possible to pay via Paypal ?</li>
+					<li>Do you have a specific policy regarding environment ?</li>
 				</ul>
 			</p>
 		  </div>
@@ -66,7 +134,7 @@
 		
 		<div id="title-div">
 			<div class="img-div"><a href="http://www.ic4.ie/"><img class="logo" src="img/IC4.png"></a></div>
-			<div class="h1-div"><h1>Semantic IaaS Pricing Service</h1></div>
+			<div class="h1-div"><h1>Semantic IaaS Pricing - Service</h1></div>
 			<div class="img-div"><a href="http://www.rendicity.com/"><img class="logo" src="img/Rendicity.png"></a></div>
 		</div>
 			

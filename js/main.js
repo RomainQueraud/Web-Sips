@@ -1,6 +1,15 @@
 // Sliders : http://seiyria.com/bootstrap-slider/
 // Switchs : http://www.bootstrap-switch.org/
 
+function myOnLoad(){
+	$("#closeModal").on('click', closeModal);
+	$("#buttonModal").on('click', openModal);
+	$("#aboutModal").on('click', closeModalAbout);
+	$("#closeContactModal").on('click', closeModal);
+	$("#buttonContactModal").on('click', openContactModal);
+	$("#contactModal").on('click', closeModalAbout);
+}
+
 var baseURI = "http://www.ic4.ie/SIPS/";
 var FusekiServerAdress = "http://sips.hopto.org:3030";
 
@@ -72,7 +81,12 @@ var URI = {
 
 function openModal(){
 	//$(".modal").css("display", "block");
-	$(".modal").attr("class", "modal displayed");
+	$("#aboutModal").attr("class", "modal displayed");
+	return false;
+}
+
+function openContactModal(){
+	$("#contactModal").attr("class", "modal displayed");
 	return false;
 }
 
@@ -478,6 +492,7 @@ function getProviderDiv(config, box){
 				'+getPriceDiv(config)+'\n\
 				<p class="config-date">Date <b>'+date+'</b></p>\n\
 				<div class="addInfo" id='+id+'>\n\
+					<p>Crawled on <b>'+date+'</b>\n\
 					<p>Continent <b>'+continent+'</b>\n\
 					<p>Os <b>'+os+'</b>\n\
 					<p>Billing <b>'+billing+'</b>\n\
@@ -602,6 +617,7 @@ function sendQuery(minimal){
 }
 
 function errorQuery(){
+	$("#green-part").css("display", "inline-block");
 	var div = '<p id="serverError" class="config">Server is turned off, please contact the administrator</p>';
 	$('.config').remove();
 	var providersDiv = document.getElementById("green-part");
@@ -629,7 +645,7 @@ function successQuery(configs){
 	configs = getOptimizedConfigs(configs);
 	configs = filterAdditionalConfigs(configs);
 	configs = sortConfigs(configs);
-	updateDate(configs);
+	//updateDate(configs);
 	var providersDiv = document.getElementById("green-part");
 	$('.config').remove();
 	$('.config boxState').remove();

@@ -14,8 +14,8 @@ img {
 	display: none;
 }
 
-#closeModal {
-	display: none;
+.h1-print {
+	display:inline;
 }
 
 .h1-div {
@@ -71,18 +71,10 @@ img {
 	display: none;
 }
 
-#modal-ul {
-	display: none;
-}
-
 .config-date{
 	display:block;
 }
 
 .modal{
-	display: block;
-}
-
-#modal-title, #modal-text, .modal-header, .modal-content, #about-modal{
-	display: inline;
+	display: none;
 }

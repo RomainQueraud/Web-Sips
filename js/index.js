@@ -3,6 +3,7 @@ function onLoad(){
 	if(window.location.href.includes("github")){
 		window.location.href = "http://ic4-sips.s3-website-eu-west-1.amazonaws.com/";
 	}
+	$(".slider-tick").removeClass("in-selection").removeClass("round").removeClass("slider-tick");
 	$("#print-btn").on('click', printReport);
 	$("#csv-btn").on('click', exportToCsv);
 	$("#more-btn").on('click', openNav);
@@ -21,5 +22,6 @@ function onLoad(){
 	$("#billing-select").on('change', sendQuery); 
 	//$("#sparqlA").attr("href", FusekiServerAdress+"/control-panel.tpl");
 	$("#sparql-form").attr("action", FusekiServerAdress+"/ds/query");
+	
 	sendQuery();
 }

@@ -478,7 +478,7 @@ function getProviderDiv(config, box){
 	
 	if(box){
 		var div = '\
-		<div class="config'+getDisplayDiv()+'" onmouseover="displayAdditionalInfo('+id+')" onmouseout="hideAdditionalInfo('+id+')">\n\
+		<div class="config'+getDisplayDiv()+' animated zoomIn" onmouseover="displayAdditionalInfo('+id+')" onmouseout="hideAdditionalInfo('+id+')">\n\
 			<a href="'+links[providerName]+'">\n\
 				<img src="'+img+'" alt="'+providerName+'">\n\
 				<p class="alt-img">'+providerName+'</p>\n\
@@ -504,7 +504,7 @@ function getProviderDiv(config, box){
 	}
 	else{ //Display line
 		var div = '\
-		<tr class="table-tr">\n\
+		<tr class="table-tr animated zoomIn">\n\
 			<th scope="row">\n\
 				<a href="'+links[providerName]+'">\n\
 					<img src="'+img+'" alt="Provider image">\n\
@@ -573,7 +573,7 @@ function sendQuery(minimal){
 	var out = 10000;
 	var configs;
 	$("#loading-image").css("visibility", "visible"); 
-	if(minimal){
+	if(minimal==true){
 		out=20000;
 		$('[name=query]').val(getSparqlQueryMinimal());
 	}
@@ -590,11 +590,11 @@ function sendQuery(minimal){
 		success : function(result) {
 			configs = result.results.bindings;
 			queryOver = true;
-			if(!minimal){
-				successQuery(configs)
+			if(minimal == true){
+				successQueryMinimal(configs); //minimal is called by stats.js
 			}
 			else{
-				successQueryMinimal(configs);
+				successQuery(configs)
 			}
 			$("#loading-image").css("visibility", "hidden"); 
 		},
@@ -684,6 +684,10 @@ function successQuery(configs){
 			providersDiv.insertAdjacentHTML('beforeend', div);
 		}
 	}
+	console.log("bonjour");
+	$("#sliders").addClass("animated fadeInRight");
+	console.log("coucou");
+	console.log($("#sliders").text());
 }
 
 /* Return a new list of configs, with only the cheapest for each provider 

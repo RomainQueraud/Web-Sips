@@ -43,6 +43,8 @@ img {
 .config {
 	display : block;
 	border-style: solid;
+	border-right-style: none;
+	border-left-style: none;
 	border-width: 2px;
 }
 
@@ -77,4 +79,12 @@ img {
 
 .modal{
 	display: none;
+}
+
+#lucid-chart {
+	display: none;
+}
+
+#ontology-image {
+	display: inline;
 }

@@ -160,7 +160,7 @@ Color is based on the provider name. So it should be different for every provide
 function getColorLine(providername, alpha){
 	var lowerName = providername.toLowerCase();
 	var r = Math.floor(((lowerName.charCodeAt(0)-97)/(122-97))*255);
-	var g = Math.floor(((lowerName.charCodeAt((lowerName.length-1)/2)-97)/(122-97))*255);
+	var g = Math.floor(((lowerName.charCodeAt((2))-97)/(122-97))*255);
 	var b = Math.floor(((lowerName.charCodeAt(lowerName.length-1)-97)/(122-97))*255);
 	return 'rgba('+r+', '+g+', '+b+', '+alpha+')';
 }

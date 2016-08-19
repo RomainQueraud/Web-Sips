@@ -204,6 +204,10 @@ div .vertical img, div .vertical input{
 	margin-bottom : 15px;
 }
 
+#ontology-image{
+	display:none;
+}
+
 /**************** Modal ***************/
 
 .modal-header {

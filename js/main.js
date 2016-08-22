@@ -492,7 +492,7 @@ function getProviderDiv(config, box){
 				'+getPriceDiv(config)+'\n\
 				<p class="config-date">Date <b>'+date+'</b></p>\n\
 				<div class="addInfo" id='+id+'>\n\
-					<p>Crawled on <b>'+date+'</b>\n\
+					<p>Crawled <b>'+date+'</b>\n\
 					<p>Continent <b>'+continent+'</b>\n\
 					<p>Os <b>'+os+'</b>\n\
 					<p>Billing <b>'+billing+'</b>\n\
@@ -525,6 +525,7 @@ function getProviderDiv(config, box){
 					<p>Billing <b>'+billing+'</b>\n\
 					<p>'+comment+'</p>\n\
 					'+getSharedDiv(cpu)+'\n\
+					<p>Crawled <b>'+date+'</b>\n\
 				</div>\n\
 			</td>\n\
 		</tr>';
@@ -578,6 +579,11 @@ function sendQuery(minimal){
 		$('[name=query]').val(getSparqlQueryMinimal());
 	}
 	else{
+		$( ".tooltip-inner" ).each(function(index) {
+			if($(this).text()=="0"){
+				$(this).text("Any");
+			}
+		});
 		fillTextArea();
 	}
 	$.ajax({

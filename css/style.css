@@ -108,6 +108,7 @@ div .vertical img, div .vertical input{
 	margin-top : 20px;
 	display : inline-block;
 	text-align : center;
+	//background-image: url("../img/noise.png");
 	background : #339966;
 	//border-radius: 50px;
 	width:100%;
@@ -346,4 +347,24 @@ div .vertical img, div .vertical input{
 
 .boxState {
 	display : none;
+}
+
+.swiper-container {
+	display : none;
+}
+
+@media(max-width: 815px) {
+	body{
+		background: SlateGrey;
+	}
+	
+	#title-div .img-div{
+		display:none;
+	}
+	
+	.swiper-container {
+		display: inline-block;
+		width: 600px;
+		height: 300px;
+	}
 }

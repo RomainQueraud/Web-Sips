@@ -11,6 +11,7 @@
 		<link href="css/bootstrap-slider.css" rel="stylesheet" media="screen">
 		<link href="css/bootstrap-switch.css" rel="stylesheet" media="screen">
 		<link href="css/animate.css" rel="stylesheet" media="screen">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css" rel="stylesheet" media="screen">
 		<link href="css/style.css" rel="stylesheet" media="screen">
 		<link href="css/print.css" rel="stylesheet" media="print">
     </head>
@@ -19,6 +20,7 @@
 		<script src="js/bootstrap.min.js"></script>
 		<script src="js/bootstrap-slider.js"></script>
 		<script src="js/bootstrap-switch.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.min.js"></script>
 		<script src="js/main.js"></script>
 		<script src="js/index.js"></script>
 		
@@ -182,6 +184,15 @@
 		<div id="main">
 			<div id="green-part">
 				<div id="sliders">
+					<div class="swiper-container">
+						<!-- Additional required wrapper -->
+						<div class="swiper-wrapper">
+							<!-- Slides -->
+							<div class="swiper-slide">Slide 1</div>
+							<div class="swiper-slide">Slide 2</div>
+							<div class="swiper-slide">Slide 3</div>
+						</div>
+					</div>
 					<div class="slider">
 						<input
 							type="text"
@@ -286,5 +297,8 @@
 			</div>
 		</div>
 		<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-57babb98b3adc85e"></script>
+		<script>
+			beforeLoad();
+		</script>
     </body>
 </html>

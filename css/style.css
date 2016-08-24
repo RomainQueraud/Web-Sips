@@ -65,6 +65,14 @@ h1 {
 	display: none; /* Comment to display form*/
 }
 
+.mobile{
+	display: none;
+}
+
+#title-div .mobile{
+	display: none;
+}
+
 .form-group input, .form-group select {
 	display : inline;
 }
@@ -101,7 +109,10 @@ div .vertical img, div .vertical input{
 .slider{
 	display : inline-block;
 	vertical-align: top;
-	margin : 15px;
+	margin-left : 15px;
+	margin-right : 15px;
+	margin-top: 15px;
+	margin-bottom: 15px;
 }
 
 #green-part {
@@ -349,22 +360,48 @@ div .vertical img, div .vertical input{
 	display : none;
 }
 
-.swiper-container {
+.stepper {
 	display : none;
 }
 
 @media(max-width: 815px) {
 	body{
-		background: SlateGrey;
+	}
+	
+	.desktop{
+		display: none;
+	}
+	
+	#title-div .desktop{
+		display: none;
+	}
+	
+	p.mobile{
+		display: block;
+	}
+	
+	#title-div{
+		text-align: center;
+	}
+	
+	#title-div .mobile{
+		display: block;
+	}
+	
+	.stepper{
+		//display: block;
+		margin: 15px;
+	}
+	
+	.stepper input{
+		text-align: center;
 	}
 	
 	#title-div .img-div{
 		display:none;
 	}
-	
-	.swiper-container {
-		display: inline-block;
-		width: 600px;
-		height: 300px;
-	}
+}
+
+@-moz-document url-prefix() {
+  fieldset { display: table-cell; }
 }

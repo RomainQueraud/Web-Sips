@@ -120,7 +120,8 @@
 		<div class="h1-print"><h1>Semantic IaaS Pricing - Service</h1></div>
 		<div id="title-div">
 			<div class="img-div"><a href="http://www.ic4.ie/"><img class="logo" src="img/IC4.png"></a></div>
-			<div class="h1-div"><h1>Semantic IaaS Pricing - Service</h1></div>
+			<div class="h1-div desktop"><h1>Semantic IaaS Pricing - Service</h1></div>
+			<div class="h1-div mobile"><h1>SIPS - Service</h1></div>
 			<div class="img-div"><a href="http://www.rendicity.com/"><img class="logo" src="img/Rendicity.png"></a></div>
 		</div>
 			
@@ -184,16 +185,28 @@
 		<div id="main">
 			<div id="green-part">
 				<div id="sliders">
-					<div class="swiper-container">
-						<!-- Additional required wrapper -->
-						<div class="swiper-wrapper">
-							<!-- Slides -->
-							<div class="swiper-slide">Slide 1</div>
-							<div class="swiper-slide">Slide 2</div>
-							<div class="swiper-slide">Slide 3</div>
-						</div>
+					<div class="stepper">
+						<button type="button" class="btn btn-default" onClick="minusStepper('cpu')">-</button>
+						<input id="cpu-number-input" "number" value="0">
+						<button type="button" class="btn btn-default" onClick="addStepper('cpu')">+</button>
+					</div>
+					<div class="stepper">
+						<button type="button" class="btn btn-default" onClick="minusStepper('ram')">-</button>
+						<input id="ram-number-input" "number" value="0">
+						<button type="button" class="btn btn-default" onClick="addStepper('ram')">+</button>
+					</div>
+					<div class="stepper">
+						<button type="button" class="btn btn-default" onClick="minusStepper('disk')">-</button>
+						<input id="disk-number-input" "number" value="0">
+						<button type="button" class="btn btn-default" onClick="addStepper('disk')">+</button>
+					</div>
+					<div class="stepper">
+						<button type="button" class="btn btn-default" onClick="minusStepper('transfer')">-</button>
+						<input id="transfer-number-input" "number" value="0">
+						<button type="button" class="btn btn-default" onClick="addStepper('transfer')">+</button>
 					</div>
 					<div class="slider">
+						<p class="mobile">Cpu</P>
 						<input
 							type="text"
 							name="cpuSlider"
@@ -206,9 +219,10 @@
 							data-slider-orientation="vertical"
 							data-slider-reversed="true"
 						>
-						<p>Cpu</P>
+						<p class="desktop">Cpu</P>
 					</div>
 					<div class="slider">
+						<p class="mobile">Ram</P>
 						<input
 							type="text"
 							name="ramSlider"
@@ -221,9 +235,10 @@
 							data-slider-orientation="vertical"
 							data-slider-reversed="true"
 						>
-						<p>Ram</p>
+						<p class="desktop">Ram</p>
 					</div>
 					<div class="slider">
+						<p class="mobile">Disk</P>
 						<input
 							type="text"
 							name="diskSlider"
@@ -236,9 +251,10 @@
 							data-slider-orientation="vertical"
 							data-slider-reversed="true"
 						>
-						<p>Disk</p>
+						<p class="desktop">Disk</p>
 					</div>
 					<div class="slider">
+						<p class="mobile">Transfer</P>
 						<input
 							type="text"
 							name="transferSlider"
@@ -251,7 +267,7 @@
 							data-slider-orientation="vertical"
 							data-slider-reversed="true"
 						>
-						<p>Transfer</p>
+						<p class="desktop">Transfer</p>
 					</div>
 					
 					<div class="vertical">
@@ -296,9 +312,9 @@
 				</div>
 			</div>
 		</div>
-		<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-57babb98b3adc85e"></script>
 		<script>
-			beforeLoad();
+			beforeDomComplete();
 		</script>
+		<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-57babb98b3adc85e"></script>
     </body>
 </html>

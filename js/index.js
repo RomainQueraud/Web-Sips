@@ -1,4 +1,24 @@
 function onLoad(){
+}
+
+function beforeDomComplete(){
+	if($(window).width() < 815){
+		$('[name=cpuSlider]').attr("data-slider-orientation", "horizontal");
+		$('[name=cpuSlider]').attr("data-slider-reversed", "false");
+		$('[name=ramSlider]').attr("data-slider-orientation", "horizontal");
+		$('[name=ramSlider]').attr("data-slider-reversed", "false");
+		$('[name=diskSlider]').attr("data-slider-orientation", "horizontal");
+		$('[name=diskSlider]').attr("data-slider-reversed", "false");
+		$('[name=transferSlider]').attr("data-slider-orientation", "horizontal");
+		$('[name=transferSlider]').attr("data-slider-reversed", "false");
+		$(".slider").css("margin-top", "0px");
+		$(".slider").css("margin-bottom", "0px");
+		$(".slider p").css("margin-top", "0px");
+		$(".slider p").css("margin-bottom", "0px");
+	}
+}
+
+$(document).ready(function() {
 	myOnLoad();
 	if(window.location.href.includes("github")){
 		window.location.href = "http://ic4-sips.s3-website-eu-west-1.amazonaws.com/";
@@ -24,4 +44,29 @@ function onLoad(){
 	$("#sparql-form").attr("action", FusekiServerAdress+"/ds/query");
 	
 	sendQuery();
+});
+
+$(window).resize(function() {
+    if( $(this).width() < 815 ) {
+    }
+});
+
+function addStepper(name){
+	var tickStr = $('[name='+name+'Slider]').attr("data-slider-ticks"); //Get list from the associated bootstrap slider
+	var tickList = JSON.parse(tickStr);
+	var actualValue = parseInt($("#"+name+"-number-input").attr("value"));
+	var actualIndex = tickList.indexOf(actualValue);
+	var nextValue = (actualIndex+1<tickList.length)?tickList[actualIndex+1]:tickList[actualIndex];
+	$("#"+name+"-number-input").attr("value", nextValue);
+	setSliderValue(name, nextValue);
+}
+
+function minusStepper(name){
+	var tickStr = $('[name='+name+'Slider]').attr("data-slider-ticks"); //Get list from the associated bootstrap slider
+	var tickList = JSON.parse(tickStr);
+	var actualValue = parseInt($("#"+name+"-number-input").attr("value"));
+	var actualIndex = tickList.indexOf(actualValue);
+	var nextValue = (actualIndex-1>=0)?tickList[actualIndex-1]:tickList[actualIndex];
+	$("#"+name+"-number-input").attr("value", nextValue);
+	setSliderValue(name, nextValue);
 }

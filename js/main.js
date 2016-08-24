@@ -142,6 +142,12 @@ function printReport(){
 
 /* ============================================================ */
 
+function setSliderValue(name, value){
+	console.log("setSliderValue("+name+", "+value+")");
+	$('[name='+name+'Slider]').slider("setValue", value);
+	sendQuery();
+}
+
 /* Return the value of CPU slider */
 function getCpuValue(){
 	return $('[name=cpuSlider]').slider().slider("getValue");
@@ -663,7 +669,7 @@ function successQuery(configs){
 		}
 	}
 	if(!isDisplayBoxs()){
-		var div = '<div id="table-configs" class="config">\
+		var div = '<div id="table-configs" class="table-responsive config">\
 						<table class="table">\
 						  <thead class="thead-inverse">\
 							<tr>\
@@ -690,10 +696,7 @@ function successQuery(configs){
 			providersDiv.insertAdjacentHTML('beforeend', div);
 		}
 	}
-	console.log("bonjour");
 	$("#sliders").addClass("animated fadeInRight");
-	console.log("coucou");
-	console.log($("#sliders").text());
 }
 
 /* Return a new list of configs, with only the cheapest for each provider 

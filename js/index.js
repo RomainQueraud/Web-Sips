@@ -1,4 +1,5 @@
 function onLoad(){
+	myOnLoad();
 }
 
 function beforeDomComplete(){
@@ -15,11 +16,12 @@ function beforeDomComplete(){
 		$(".slider").css("margin-bottom", "0px");
 		$(".slider p").css("margin-top", "0px");
 		$(".slider p").css("margin-bottom", "0px");
+		$(".nav").addClass("nav-stacked");
 	}
 }
 
 $(document).ready(function() {
-	myOnLoad();
+	var mobile = $(window).width() < 815;
 	if(window.location.href.includes("github")){
 		window.location.href = "http://ic4-sips.s3-website-eu-west-1.amazonaws.com/";
 	}
@@ -36,7 +38,7 @@ $(document).ready(function() {
 	$("[name='os-checkbox']").on('switchChange.bootstrapSwitch', sendQuery); 
 	$("[name='currency-checkbox']").bootstrapSwitch('state', false);
 	$("[name='currency-checkbox']").on('switchChange.bootstrapSwitch', sendQuery);
-	$("[name='display-checkbox']").bootstrapSwitch('state', true);
+	$("[name='display-checkbox']").bootstrapSwitch('state', !mobile); //false if mobile, true if desktop
 	$("[name='display-checkbox']").on('switchChange.bootstrapSwitch', sendQuery);
 	$("#continent-select").on('change', sendQuery); 
 	$("#billing-select").on('change', sendQuery); 

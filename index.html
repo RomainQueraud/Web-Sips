@@ -25,11 +25,23 @@
 		<script src="js/index.js"></script>
 		
 		<ul class="nav nav-pills">
-		  <li role="presentation" class="active"><a href="">Pricing</a></li>
-		  <li role="presentation"><a id="sparqlA" href="endpoint.html">SPARQL</a></li>
-		  <li role="presentation"><a href="stats.html">Graphics</a></li>
-		  <li role="presentation"><a id="buttonModal" href="">About</a></li>
-		  <li role="presentation"><a id="buttonContactModal" href="">Contact</a></li>
+		  <li role="presentation" class="dropdown">
+			<a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+			  Menu <span class="caret"></span>
+			</a>
+			<ul class="dropdown-menu">
+			  <li role="presentation"><a href="">Pricing</a></li>
+			  <li role="presentation"><a id="sparqlA" href="endpoint.html">SPARQL</a></li>
+			  <li role="presentation"><a href="stats.html">Graphics</a></li>
+			  <li role="presentation"><a id="buttonModal" href="">About</a></li>
+			  <li role="presentation"><a id="buttonContactModal" href="">Contact</a></li>
+			</ul>
+		  </li>
+		  <li role="presentation" class="active desktop"><a href="">Pricing</a></li>
+		  <li role="presentation" class="desktop"><a id="sparqlA" href="endpoint.html">SPARQL</a></li>
+		  <li role="presentation" class="desktop"><a href="stats.html">Graphics</a></li>
+		  <li role="presentation" class="desktop"><a id="buttonModal" href="">About</a></li>
+		  <li role="presentation" class="desktop"><a id="buttonContactModal" href="">Contact</a></li>
 		</ul>
 					
 		<div id="aboutModal" class="modal">
@@ -121,7 +133,7 @@
 		<div id="title-div">
 			<div class="img-div"><a href="http://www.ic4.ie/"><img class="logo" src="img/IC4.png"></a></div>
 			<div class="h1-div desktop"><h1>Semantic IaaS Pricing - Service</h1></div>
-			<div class="h1-div mobile"><h1>SIPS - Service</h1></div>
+			<div class="h1-div mobile"><h1>SIPS - Service</h1><img id="loading-image" src="img/ajax-loader.gif" alt="Reloading" height="40" width="40" style="visibility : hidden;"></div>
 			<div class="img-div"><a href="http://www.rendicity.com/"><img class="logo" src="img/Rendicity.png"></a></div>
 		</div>
 			
@@ -271,7 +283,7 @@
 					</div>
 					
 					<div class="vertical">
-						<img id="loading-image" src="img/ajax-loader.gif" alt="Reloading" height="40" width="40" style="visibility : hidden;"> 
+						<img id="loading-image" class="desktop" src="img/ajax-loader.gif" alt="Reloading" height="40" width="40" style="visibility : hidden;"> 
 						<br />
 						<div class="form-group">
 							<select class="form-control" id="continent-select">

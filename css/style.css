@@ -368,6 +368,25 @@ div .vertical img, div .vertical input{
 	body{
 	}
 	
+	.nav{
+		margin-bottom: 15px;
+	}
+	
+	table { table-layout: fixed; }
+	table td { word-wrap: break-word; }
+	
+	.table th, .table td{
+		padding: 0px;
+	}
+	
+	#green-part{
+		margin-top: 3px;
+	}
+	
+	#loading-image.desktop{
+		display: none;
+	}
+	
 	.desktop{
 		display: none;
 	}
@@ -380,8 +399,9 @@ div .vertical img, div .vertical input{
 		display: block;
 	}
 	
-	#title-div{
+	#title-div > .h1-div{
 		text-align: center;
+		width:100%;
 	}
 	
 	#title-div .mobile{

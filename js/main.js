@@ -524,7 +524,7 @@ function getProviderDiv(config, box){
 			<td>'+transfer+'</td>\n\
 			<td>'+getPriceDiv(config)+'</td>\n\
 			<td class="config-date">'+date+'</td>\n\
-			<td class="additional">\n\
+			<td class="additional desktop">\n\
 				<div style="overflow-y: scroll; height:90px">\n\
 					<p>Continent <b>'+continent+'</b>\n\
 					<p>Os <b>'+os+'</b>\n\
@@ -579,7 +579,7 @@ function fillTextArea(){
 function sendQuery(minimal){
 	var out = 10000;
 	var configs;
-	$("#loading-image").css("visibility", "visible"); 
+	$("[id=loading-image]").css("visibility", "visible"); 
 	if(minimal==true){
 		out=20000;
 		$('[name=query]').val(getSparqlQueryMinimal());
@@ -608,7 +608,7 @@ function sendQuery(minimal){
 			else{
 				successQuery(configs)
 			}
-			$("#loading-image").css("visibility", "hidden"); 
+			$("[id=loading-image]").css("visibility", "hidden"); 
 		},
 		error: function(xhr, resp, text) {
 			if(FusekiServerAdress != "http://localhost:3030"){
@@ -621,7 +621,7 @@ function sendQuery(minimal){
 				console.log(xhr, resp, text);
 				queryOver = true;
 				errorQuery();
-				$("#loading-image").css("visibility", "hidden"); 
+				$("[id=loading-image]").css("visibility", "hidden"); 
 			}
 		}
 	})
@@ -681,7 +681,7 @@ function successQuery(configs){
 							  <th>Transfer</th>\
 							  <th>Price</th>\
 							  <th class="config-date">Date</th>\
-							  <th class="additional">Additional</th>\
+							  <th class="additional desktop">Additional</th>\
 							</tr>\
 						  </thead>\
 						  <tbody id="table-configs-tbody">\

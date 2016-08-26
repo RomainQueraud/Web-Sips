@@ -21,18 +21,18 @@
 			  Menu <span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu">
-			  <li role="presentation"><a href="">Pricing</a></li>
+			  <li role="presentation"><a href="index.html">Pricing</a></li>
 			  <li role="presentation"><a id="sparqlA" href="endpoint.html">SPARQL</a></li>
 			  <li role="presentation"><a href="stats.html">Graphics</a></li>
 			  <li role="presentation"><a id="buttonModal" href="">About</a></li>
 			  <li role="presentation"><a id="buttonContactModal" href="">Contact</a></li>
 			</ul>
 		  </li>
-		  <li role="presentation"><a href="index.html">Pricing</a></li>
-		  <li role="presentation" class="active"><a id="sparqlA" href="">SPARQL</a></li>
-		  <li role="presentation"><a href="stats.html">Graphics</a></li>
-		  <li role="presentation"><a id="buttonModal" href="">About</a></li>
-		  <li role="presentation"><a id="buttonContactModal" href="">Contact</a></li>
+		  <li role="presentation" class="desktop"><a href="index.html">Pricing</a></li>
+		  <li role="presentation" class="active desktop"><a id="sparqlA" href="">SPARQL</a></li>
+		  <li role="presentation" class="desktop"><a href="stats.html">Graphics</a></li>
+		  <li role="presentation" class="desktop"><a id="buttonModal" href="">About</a></li>
+		  <li role="presentation" class="desktop"><a id="buttonContactModal" href="">Contact</a></li>
 		</ul>
 		
 		<div id="aboutModal" class="modal">
@@ -103,14 +103,15 @@
 		<div class="h1-print"><h1>Semantic IaaS Pricing - Endpoint</h1></div>
 		<div id="title-div">
 			<div class="img-div"><a href="http://www.ic4.ie/"><img class="logo" src="img/IC4.png"></a></div>
-			<div class="h1-div"><h1>Semantic IaaS Pricing - Endpoint</h1></div>
+			<div class="h1-div desktop"><h1>Semantic IaaS Pricing - Endpoint</h1></div>
+			<div class="h1-div mobile"><h1>SIPS - Endpoint</h1></div>
 			<div class="img-div"><a href="http://www.rendicity.com/"><img class="logo" src="img/Rendicity.png"></a></div>
 		</div>
 		
 		<div id="green-part">
 			<div id="sliders">
 				<form id="sparql-form" action="" method="GET" accept-charset="UTF-8" onsubmit="doSubmit();">
-					<textarea name="query" cols="70" rows="10" style="width : 400px; height : 170px;" onfocus="if(this.value==this.defaultValue)this.value='';" onblur="if(this.value=='')this.value=this.defaultValue;">Enter QUERY here</textarea>
+					<textarea name="query" cols="70" rows="10" style="height : 170px;" onfocus="if(this.value==this.defaultValue)this.value='';" onblur="if(this.value=='')this.value=this.defaultValue;">Enter QUERY here</textarea>
 					<br>
 
 					Output: <select name="output">

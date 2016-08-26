@@ -368,6 +368,23 @@ div .vertical img, div .vertical input{
 	body{
 	}
 	
+	textarea{
+		width: 75%;
+	}
+	
+	.config.left{
+		width: 80%;
+	}
+	
+	#chart{
+		min-width: 0%;
+		min-height: 350px;
+	}
+	
+	#sliders{
+		min-width: 0px;
+	}
+	
 	.nav{
 		margin-bottom: 15px;
 	}

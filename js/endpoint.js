@@ -3,7 +3,7 @@ var ajaxTest = true;
 
 $(document).ready(function() {
          $('.carousel').carousel({
-             interval: 3000
+             interval: 10000
          })
     }
 );    

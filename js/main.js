@@ -2,12 +2,12 @@
 // Switchs : http://www.bootstrap-switch.org/
 
 function myOnLoad(){
-	$("#closeModal").on('click', closeModal);
-	$("#buttonModal").on('click', openModal);
-	$("#aboutModal").on('click', closeModalAbout);
-	$("#closeContactModal").on('click', closeModal);
-	$("#buttonContactModal").on('click', openContactModal);
-	$("#contactModal").on('click', closeModalAbout);
+	$("[id=closeModal]").on('click', closeModal);
+	$("[id=buttonModal]").on('click', openModal);
+	$("[id=aboutModal]").on('click', closeModalAbout);
+	$("[id=closeContactModal]").on('click', closeModal);
+	$("[id=buttonContactModal]").on('click', openContactModal);
+	$("[id=contactModal]").on('click', closeModalAbout);
 }
 
 var baseURI = "http://www.ic4.ie/SIPS/";
@@ -521,7 +521,7 @@ function getProviderDiv(config, box){
 			<td>'+ram+'</td>\n\
 			<td>'+ssd+'</td>\n\
 			<td>'+hdd+'</td>\n\
-			<td>'+transfer+'</td>\n\
+			<td class="desktop">'+transfer+'</td>\n\
 			<td>'+getPriceDiv(config)+'</td>\n\
 			<td class="config-date">'+date+'</td>\n\
 			<td class="additional desktop">\n\
@@ -678,7 +678,7 @@ function successQuery(configs){
 							  <th>RAM</th>\
 							  <th>SSD</th>\
 							  <th>HDD</th>\
-							  <th>Transfer</th>\
+							  <th class="desktop">Transfer</th>\
 							  <th>Price</th>\
 							  <th class="config-date">Date</th>\
 							  <th class="additional desktop">Additional</th>\
